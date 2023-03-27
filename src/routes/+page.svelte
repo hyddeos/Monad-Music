@@ -1,2 +1,5 @@
-<h1 class="text-red">Welcome to SvelteKit</h1>
-<p class="">Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<section>
+    <div class="text-center ">
+        <h2 class="text-3xl font-ingress font-thin italic tracking-wider">Lust Lera Leva</h2>
+    </div>
+</section>

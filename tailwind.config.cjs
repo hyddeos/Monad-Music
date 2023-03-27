@@ -59,6 +59,11 @@ const config = {
       'error':  '#EC6A52',
       'succes': '#70C09E',
     },
+    fontFamily: {
+      'heading': ['Montserrat'],
+      'ingress': ['Lora'],
+      'paragraph': ['Hind Madurai'],
+    },
     extend: {},
   },
 
