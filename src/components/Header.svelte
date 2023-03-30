@@ -6,11 +6,9 @@
   }
 </script>
 
-<div>
+<div class="container mx-auto w-full">
   <div>
-    <nav
-      class="absolute container px-6 py-8 mx-auto md:flex md:justify-between md:items-center"
-    >
+    <nav class="absolute container w-full px-6 py-8 mx-auto md:flex md:justify-between md:items-center">
       <div class="flex items-center justify-between">
         <a
           class="text-xl font-bold text-gray-800 md:text-2xl hover:text-blue-400"
