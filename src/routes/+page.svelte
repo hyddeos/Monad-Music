@@ -2,26 +2,28 @@
   	$: innerHeight = 0
 	  $: innerWidth = 0
 
-    let t = makeNewHeight();
-    let s = makeNewWidth();
+    $: t = makeNewHeight();
+    $: s = makeNewWidth();
 
-function makeNewHeight(){      
-    var newH = Math.floor(Math.random() * innerHeight);    
-    return newH;        
+    const incr = () => (makeNewHeight(), makeNewWidth)
+
+function makeNewHeight(innerHeight){
+  return Math.floor(Math.random() * innerHeight); 
 }
 function makeNewWidth(){      
     var newW = Math.floor(Math.random() * innerWidth);    
     return newW;   
 }
 
-
-
-
 </script>
 
-<svelte:window bind:innerWidth bind:innerHeight />
+  <svelte:window bind:innerWidth bind:innerHeight />
+
 
 <section class="bg-prim-900 h-screen text-center">
+  <button on:click={random}>
+    random
+  </button>
   <div id="spotlight1"></div>
   <p>
     Inner Width: {innerWidth}, Random: {t}
