@@ -46,11 +46,10 @@
           : 'hidden'}"
       >
         <a class="text-gray-800 hover:text-blue-400" href="/home">Home</a>
-        <a class="text-gray-800 hover:text-blue-400" href="/blog">Blogs</a>
-        <a class="text-gray-800 hover:text-blue-400" href="/contact"
-          >Contact US</a
+        <a class="text-gray-800 hover:text-blue-400" href="/coverartgame">Cover Art Game</a>
+        <a class="text-gray-800 hover:text-blue-400" href="/chooser"
+          >Music Chooser</a
         >
-        <a class="text-gray-800 hover:text-blue-400" href="/about">About Us</a>
       </div>
     </nav>
   </div>
