@@ -81,7 +81,7 @@
           <h1>
             <h3
               class="text-4xl text-right font-ingress font-thin italic tracking-wider">
-              - Lust Lera Leva
+              - Tag line Bla Bla Bla
             </h3>
           </h1>
         </h1>
@@ -94,11 +94,11 @@
     mix-blend-mode: color-dodge;
     opacity: 0.5;
     z-index: -1;
-    position: absolute;
+    position: fixed;
     width: 30rem;
     height: 30rem;
     background-color: blueviolet;
-    filter: blur(1.5rem);
+    filter: blur(3rem);
     border-radius: 100%;
     transition: transform 6s ease-out;
   }
@@ -106,11 +106,11 @@
     mix-blend-mode: color-dodge;
     opacity: 0.3;
     z-index: -1;
-    position: absolute;
+    position: fixed;
     width: 35rem;
     height: 35rem;
     background-color: pink;
-    filter: blur(1.5rem);
+    filter: blur(3rem);
     border-radius: 100%;
     transition: transform 6s ease-out;
   }
@@ -118,17 +118,17 @@
     mix-blend-mode: color-dodge;
     opacity: 0.2;
     z-index: -1;
-    position: absolute;
+    position: fixed;
     width: 35rem;
     height: 35rem;
     background-color: yellow;
-    filter: blur(1.5rem);
+    filter: blur(3rem);
     border-radius: 100%;
-    transition: transform 10s ease-out;
+    transition: transform 8s ease-out;
   }
   #bg {
     z-index: -2;
-    opacity: 0.4;
+    opacity: 0.3;
     min-height: 100%;
     min-width: 1024px;    
     /* Set up proportionate scaling */
