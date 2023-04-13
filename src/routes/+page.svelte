@@ -76,12 +76,13 @@
         />
       </div>
       <div class="basis-2/3 h-40">
-        <h1 class="text-8xl text-right">
-          Header
+        <h1 class="text-8xl font-heading text-right">
+          MONAD MUSIC
           <h1>
+          
             <h3
-              class="text-4xl text-right font-ingress font-thin italic tracking-wider">
-              - Tag line Bla Bla Bla
+              class="text-4xl text-right font-heading tracking-wider">
+              - Play With Playlists
             </h3>
           </h1>
         </h1>

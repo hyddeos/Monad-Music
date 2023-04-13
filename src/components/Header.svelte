@@ -11,7 +11,7 @@
     <nav class="absolute container w-full px-6 py-8 mx-auto md:flex md:justify-between md:items-center">
       <div class="flex items-center justify-between">
         <a
-          class="text-xl font-bold text-gray-800 md:text-2xl hover:text-blue-400"
+          class="text-xl font-bold font-heading text-gray-800 md:text-2xl hover:text-blue-400"
           href="/home"
           >Logo
         </a>
@@ -45,10 +45,10 @@
           ? 'flex'
           : 'hidden'}"
       >
-        <a class="text-gray-800 hover:text-blue-400" href="/home">Home</a>
-        <a class="text-gray-800 hover:text-blue-400" href="/coverartgame">Cover Art Game</a>
-        <a class="text-gray-800 hover:text-blue-400" href="/chooser"
-          >Music Chooser</a
+        <a class="font-heading text-gray-800 hover:text-prim-400" href="/home">HOME</a>
+        <a class="font-heading text-gray-800 hover:text-prim-400" href="/coverartgame">COVER ART GAME</a>
+        <a class="font-heading text-gray-800 hover:text-prim-400" href="/chooser"
+          >MUSIC CHOOSER</a
         >
       </div>
     </nav>

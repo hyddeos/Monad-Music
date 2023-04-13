@@ -60,7 +60,8 @@ const config = {
       'succes': '#70C09E',
     },
     fontFamily: {
-      'heading': ['Montserrat'],
+      'heading': ['Changa One'],
+      'handwrite': ['Tillana'],
       'ingress': ['Lora'],
       'paragraph': ['Hind Madurai'],
     },
