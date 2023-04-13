@@ -4,8 +4,9 @@
   import Header from "../components/Header.svelte";
 </script>
 
-<div class="bg-dark-900 h-screen text-light-200">
+<div class="h-screen text-light-200">
   <Header />
   <slot />
   <Footer />
 </div>
+

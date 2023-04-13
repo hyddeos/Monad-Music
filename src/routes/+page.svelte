@@ -1,37 +1,40 @@
 <script>
-  	$: innerHeight = 0
-	  $: innerWidth = 0
+  import { onMount } from 'svelte';
+  import { fade } from 'svelte/transition';
 
-    $: t = makeNewHeight();
-    $: s = makeNewWidth();
+  let bgImage = "/bg.jpg";
 
-    const incr = () => (makeNewHeight(), makeNewWidth)
+  let x = 0;
+  let y = 0;
 
-function makeNewHeight(innerHeight){
-  return Math.floor(Math.random() * innerHeight); 
-}
-function makeNewWidth(){      
-    var newW = Math.floor(Math.random() * innerWidth);    
-    return newW;   
-}
+  function updatePosition() {
+    const maxX = window.innerWidth;
+    const maxY = window.innerHeight;
+    x = Math.floor(Math.random() * maxX + 100);
+    y = Math.floor(Math.random() * maxY + 100);
+  }
+
+  onMount(() => {
+    const interval = setInterval(() => {
+      updatePosition();
+    }, 4000);
+
+    return () => clearInterval(interval);
+  });
 
 </script>
 
-  <svelte:window bind:innerWidth bind:innerHeight />
 
 
-<section class="bg-prim-900 h-screen text-center">
-  <button on:click={random}>
-    random
-  </button>
-  <div id="spotlight1"></div>
-  <p>
-    Inner Width: {innerWidth}, Random: {t}
-  </p>
-  <p>
-    Inner Height: {innerHeight}, Random: {s}
-  </p>
-    <section class="flex flex-row max-w-5xl m-auto pt-[20%]">
+
+<section class="h-screen text-center">
+  
+  <img id="bg" src="{bgImage}" alt="consert background">
+  <div class="bg-dark-900 w-full h-full fixed -z-30"></div>
+
+  <div id="spotlight1" transition:fade style="transform: translate({x}px, {y}px"></div>  
+
+    <section class="flex flex-row max-w-5xl m-auto pt-[20%] z-0">
       <div class="basis-1/3 h-40 m-auto border-r-2 border-prim-400">
         <img src="https://flowbite.com/docs/images/logo.svg"
           class="h-32"
@@ -54,11 +57,28 @@ function makeNewWidth(){
 
 <style>
   #spotlight1 {
+    mix-blend-mode: color-dodge;
+    opacity: 0.5;
+    z-index: -1;
     position: absolute;
-    width: 20rem;
-    height: 20rem;
+    width: 30rem;
+    height: 30rem;
     background-color: blueviolet;
+    filter: blur(1.5rem);
     border-radius: 100%;
+    transition: transform 6s ease-out;
   }
-
+  #bg {
+    z-index: -2;
+    opacity: 0.4;
+    min-height: 100%;
+    min-width: 1024px;    
+    /* Set up proportionate scaling */
+    width: 100%;
+    height: auto;    
+    /* Set up positioning */
+    position: fixed;
+    top: 0;
+    left: 0;
+  }
 </style>
