@@ -60,10 +60,10 @@ const config = {
       'succes': '#70C09E',
     },
     fontFamily: {
-      'heading': ['Changa One'],
-      'handwrite': ['Tillana'],
+      'heading': ['"Changa One"'],
+      'handwrite': ['"Permanent Marker"'],
       'ingress': ['Lora'],
-      'paragraph': ['Hind Madurai'],
+      'paragraph': ['"Hind Madurai"'],
     },
     extend: {},
   },

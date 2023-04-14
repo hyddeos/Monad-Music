@@ -72,7 +72,7 @@
       <div class="basis-1/3 h-40 m-auto border-r-2 border-prim-400">
         <img src="https://flowbite.com/docs/images/logo.svg"
           class="h-32"
-          alt="Flowbite Logo"
+          alt="Monad Music Logo"
         />
       </div>
       <div class="basis-2/3 h-40">
@@ -81,7 +81,7 @@
           <h1>
           
             <h3
-              class="text-4xl text-right font-heading tracking-wider">
+              class="text-4xl text-right font-handwrite tracking-wider">
               - Play With Playlists
             </h3>
           </h1>

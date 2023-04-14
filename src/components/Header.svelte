@@ -1,4 +1,8 @@
 <script>
+  let logo_w = "/logo_w.svg";
+  let logo_o = "/logo_o.svg";
+  let logo_hover = false;
+
   let showMenu = false;
 
   function toggleNavbar() {
@@ -8,12 +12,12 @@
 
 <div class="container mx-auto w-full z-30">
   <div>
-    <nav class="absolute container w-full px-6 py-8 mx-auto md:flex md:justify-between md:items-center">
+    <nav class="absolute container w-full px-6 py-4  mx-auto md:flex md:justify-between md:items-center">
       <div class="flex items-center justify-between">
-        <a
-          class="text-xl font-bold font-heading text-gray-800 md:text-2xl hover:text-blue-400"
-          href="/home"
-          >Logo
+        <a 
+          class="text-xl font-bold font-heading text-gray-800 md:text-2xl hover:text-prim-400 flex"
+          href="/"
+          >MONAD<img id="header_logo" src="{logo_o}" alt="white logo" class="px-2">MUSIC
         </a>
         <!-- Mobile menu button -->
         <div on:click={toggleNavbar} class="flex md:hidden">
@@ -54,3 +58,11 @@
     </nav>
   </div>
 </div>
+
+<style>
+  #header_logo {
+    height: 30px;
+    position:relative;
+    
+  }
+</style>
