@@ -56,7 +56,7 @@
   });
 </script>
 
-<section class="h-screen text-center">
+<section class="text-center">
   <img id="bg" src={bgImage} alt="consert background" />
   <div class="bg-dark-900 w-full h-full fixed -z-30" />
   <div

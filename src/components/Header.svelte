@@ -13,7 +13,7 @@
 <div class="container mx-auto w-full z-30">
   <div>
     <nav
-      class="absolute container w-full px-6 py-4 mx-auto md:flex md:justify-between md:items-center"
+      class="container w-full px-6 py-4 mx-auto md:flex md:justify-between md:items-center"
     >
       <div class="flex items-center justify-between">
         <a

@@ -1,6 +1,6 @@
 <script>
-  import "../app.postcss"
-	import Footer from "../components/Footer.svelte";
+  import "../app.postcss";
+  import Footer from "../components/Footer.svelte";
   import Header from "../components/Header.svelte";
 </script>
 
@@ -9,4 +9,3 @@
   <slot />
   <Footer />
 </div>
-
