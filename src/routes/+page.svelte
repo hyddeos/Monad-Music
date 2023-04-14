@@ -1,9 +1,9 @@
 <script>
-  import { onMount } from 'svelte';
-  import { fade } from 'svelte/transition';
+  import { onMount } from "svelte";
+  import { fade } from "svelte/transition";
 
   let bgImage = "/bg.jpg";
-  let logo_w = "/logo_w.svg"
+  let logo_w = "/logo_w.svg";
   // Spotlight1
   let x1 = -200;
   let y1 = -200;
@@ -54,41 +54,48 @@
 
     return () => clearInterval(interval);
   });
-
 </script>
 
-
-
-
 <section class="h-screen text-center">
-  
-  <img id="bg" src="{bgImage}" alt="consert background">
-  <div class="bg-dark-900 w-full h-full fixed -z-30"></div>
-  <div id="spotlight1" transition:fade style="transform: translate({x1}px, {y1}px; visibility: {s1 ? "visible" : "hidden"};"></div>
-  <div id="spotlight2" transition:fade style="transform: translate({x2}px, {y2}px; visibility: {s2 ? "visible" : "hidden"};"></div>
-  <div id="spotlight3" transition:fade style="transform: translate({x3}px, {y3}px; visibility: {s3 ? "visible" : "hidden"};"></div>
-  
+  <img id="bg" src={bgImage} alt="consert background" />
+  <div class="bg-dark-900 w-full h-full fixed -z-30" />
+  <div
+    id="spotlight1"
+    transition:fade
+    style="transform: translate({x1}px, {y1}px; visibility: {s1
+      ? 'visible'
+      : 'hidden'};"
+  />
+  <div
+    id="spotlight2"
+    transition:fade
+    style="transform: translate({x2}px, {y2}px; visibility: {s2
+      ? 'visible'
+      : 'hidden'};"
+  />
+  <div
+    id="spotlight3"
+    transition:fade
+    style="transform: translate({x3}px, {y3}px; visibility: {s3
+      ? 'visible'
+      : 'hidden'};"
+  />
 
-    <section class="flex flex-row max-w-5xl m-auto pt-[20%] z-0">
-      <div class="basis-1/3 h-40 m-auto border-r-2 border-prim-400">
-        <img src="{logo_w}"
-          class="h-40 m-auto"
-          alt="Monad Music Logo"
-        />
-      </div>
-      <div class="basis-2/3 h-40">
-        <h1 class="text-8xl font-heading text-right">
-          MONAD MUSIC
-          <h1>
-          
-            <h3
-              class="text-4xl text-right font-handwrite tracking-wider">
-              - Play With Playlists
-            </h3>
-          </h1>
+  <section class="flex flex-row max-w-5xl m-auto pt-[20%] z-0">
+    <div class="basis-1/3 h-40 m-auto border-r-4 border-prim-400">
+      <img src={logo_w} class="h-40 m-auto" alt="Monad Music Logo" />
+    </div>
+    <div class="basis-2/3 h-40">
+      <h1 class="text-8xl font-heading text-right">
+        MONAD MUSIC
+        <h1>
+          <h3 class="text-4xl text-right font-handwrite tracking-wider">
+            - Play With Playlists
+          </h3>
         </h1>
-      </div>
-    </section>
+      </h1>
+    </div>
+  </section>
 </section>
 
 <style>
@@ -99,7 +106,7 @@
     position: fixed;
     width: 30rem;
     height: 30rem;
-    background-color:#1cb0af;
+    background-color: #1cb0af;
     filter: blur(3rem);
     border-radius: 100%;
     transition: transform 6s ease-out;
@@ -132,7 +139,7 @@
     z-index: -2;
     opacity: 0.3;
     min-height: 100%;
-    min-width: 1024px;    
+    min-width: 1024px;
     width: 100%;
     height: auto;
     position: fixed;

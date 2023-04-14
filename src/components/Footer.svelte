@@ -4,17 +4,21 @@
 
 <footer class="absolute bottom-0 w-full">
   <div
-    class="flex flex-wrap text-center font-head font-thin justify-evenly text-light-200 m-auto bg-dark-900 opacity-50"
+    class="flex flex-wrap text-center font-head font-thin justify-evenly text-light-400 m-auto"
   >
-    <div class="m-2">
-      <span class="font-bold">Monad Music</span> © {year}
+    <div class="m-2 opacity-100">
+      <a href="/" class="font-bold hover:text-prim-400">Monad Music</a> © {year}
     </div>
-    <div class="m-2">
-      Made by <a href="https://eshtropy.se/" class="font-bold">Esh</a>
+    <div class="m-2 opacity-100">
+      Made by <a
+        href="https://eshtropy.se/"
+        class="font-bold hover:text-prim-400">Esh</a
+      >
     </div>
-    <div class="m-2">
-      Visit me at <a href="https://github.com/hyddeos" class="font-bold"
-        >Github</a
+    <div class="m-2 opacit">
+      Visit me at <a
+        href="https://github.com/hyddeos"
+        class="font-bold hover:text-prim-400">Github</a
       >
     </div>
   </div>

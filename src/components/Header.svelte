@@ -12,12 +12,19 @@
 
 <div class="container mx-auto w-full z-30">
   <div>
-    <nav class="absolute container w-full px-6 py-4  mx-auto md:flex md:justify-between md:items-center">
+    <nav
+      class="absolute container w-full px-6 py-4 mx-auto md:flex md:justify-between md:items-center"
+    >
       <div class="flex items-center justify-between">
-        <a 
+        <a
           class="text-xl font-bold font-heading text-gray-800 md:text-2xl hover:text-prim-400 flex"
           href="/"
-          >MONAD<img id="header_logo" src="{logo_o}" alt="white logo" class="px-2">MUSIC
+          >MONAD<img
+            id="header_logo"
+            src={logo_o}
+            alt="white logo"
+            class="px-2"
+          />MUSIC
         </a>
         <!-- Mobile menu button -->
         <div on:click={toggleNavbar} class="flex md:hidden">
@@ -49,10 +56,16 @@
           ? 'flex'
           : 'hidden'}"
       >
-        <a class="font-heading text-gray-800 hover:text-prim-400" href="/home">HOME</a>
-        <a class="font-heading text-gray-800 hover:text-prim-400" href="/coverartgame">COVER ART GAME</a>
-        <a class="font-heading text-gray-800 hover:text-prim-400" href="/chooser"
-          >MUSIC CHOOSER</a
+        <a class="font-heading text-gray-800 hover:text-prim-400" href="/"
+          >HOME</a
+        >
+        <a
+          class="font-heading text-gray-800 hover:text-prim-400"
+          href="/coverartgame">COVER ART GAME</a
+        >
+        <a
+          class="font-heading text-gray-800 hover:text-prim-400"
+          href="/chooser">MUSIC CHOOSER</a
         >
       </div>
     </nav>
@@ -62,7 +75,6 @@
 <style>
   #header_logo {
     height: 30px;
-    position:relative;
-    
+    position: relative;
   }
 </style>
