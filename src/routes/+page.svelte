@@ -3,6 +3,7 @@
   import { fade } from 'svelte/transition';
 
   let bgImage = "/bg.jpg";
+  let logo_w = "/logo_w.svg"
   // Spotlight1
   let x1 = -200;
   let y1 = -200;
@@ -70,8 +71,8 @@
 
     <section class="flex flex-row max-w-5xl m-auto pt-[20%] z-0">
       <div class="basis-1/3 h-40 m-auto border-r-2 border-prim-400">
-        <img src="https://flowbite.com/docs/images/logo.svg"
-          class="h-32"
+        <img src="{logo_w}"
+          class="h-40 m-auto"
           alt="Monad Music Logo"
         />
       </div>
@@ -98,7 +99,7 @@
     position: fixed;
     width: 30rem;
     height: 30rem;
-    background-color: blueviolet;
+    background-color:#1cb0af;
     filter: blur(3rem);
     border-radius: 100%;
     transition: transform 6s ease-out;
@@ -110,7 +111,7 @@
     position: fixed;
     width: 35rem;
     height: 35rem;
-    background-color: pink;
+    background-color: #f7a62f;
     filter: blur(3rem);
     border-radius: 100%;
     transition: transform 6s ease-out;
@@ -122,7 +123,7 @@
     position: fixed;
     width: 35rem;
     height: 35rem;
-    background-color: yellow;
+    background-color: #b82ff7;
     filter: blur(3rem);
     border-radius: 100%;
     transition: transform 8s ease-out;
@@ -132,10 +133,8 @@
     opacity: 0.3;
     min-height: 100%;
     min-width: 1024px;    
-    /* Set up proportionate scaling */
     width: 100%;
-    height: auto;    
-    /* Set up positioning */
+    height: auto;
     position: fixed;
     top: 0;
     left: 0;
