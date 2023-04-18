@@ -32,10 +32,11 @@
     .catch((err) => console.log("errrrrrr", err.message));
 </script>
 
-<section class="h-full">
-  <div class="m-30 m-auto">
+<section>
+  <div class="  m-auto">
     <p>Code: {code}</p>
   </div>
+
 </section>
 
 <style>
