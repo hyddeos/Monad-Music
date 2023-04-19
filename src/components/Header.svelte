@@ -17,7 +17,7 @@
     >
       <div class="flex items-center justify-between">
         <a
-          class="text-xl font-bold font-heading text-gray-800 md:text-2xl hover:text-prim-400 flex"
+          class="text-xl font-bold font-heading text-gray-800md:text-2xl hover:text-prim-400 flex"
           href="/"
           >MONAD<img
             id="header_logo"
@@ -52,7 +52,7 @@
 
       <!-- Mobile Menu open: "block", Menu closed: "hidden" -->
       <div
-        class="flex-col mt-8 space-y-4 md:flex md:space-y-0 md:flex-row md:items-center md:space-x-10 md:mt-0 {showMenu
+        class="flex-col mt-8 space-y-4 text-right md:flex md:space-y-0 md:flex-row md:items-center md:space-x-10 md:mt-0 {showMenu
           ? 'flex'
           : 'hidden'}"
       >

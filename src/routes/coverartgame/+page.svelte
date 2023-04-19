@@ -1,4 +1,6 @@
 <script>
+  let bgImage = "/bg.jpg";
+
   const Client_Id = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
   const Client_Secret = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET;
   const Client_Refresh_token = import.meta.env.VITE_SPOTIFY_REFRESH_TOKEN;
@@ -33,6 +35,7 @@
 </script>
 
 <section id="main_content" class="flex">
+  <img id="bg" src={bgImage} alt="consert background" />
   <div class="m-30 mx-auto w-full ">
 
     <button on:click={login}>Log in with Spotify</button>
@@ -40,7 +43,7 @@
     <p>Current PL: {playlist}</p>
 
     {#if game_loaded}
-      <h2 class="text-5xl text-center font-handwrite tracking-wider">What Album Is This? <span class="text-2xl text-light-300 text-right">(1/10)</span></h2>
+      <h2 class="text-5xl text-center font-handwrite tracking-wider my-2">What Album Is This? <span class="text-2xl text-light-300 text-right">(1/10)</span></h2>
       <img class="m-auto p-5 w-1/5" src={albumcover} alt="Guess this album cover">
       <div class="w-full flex flex-wrap justify-center px-2">  
         {#each albums as album}
@@ -56,14 +59,30 @@
         <button class="w-40 h-20 rounded {album_guess !== 99 ? "bg-prim-500 text-dark-700" : "invisible"}  hover:bg-dark-100">Submit</button>
       </div>  
     {:else}
-      <h2 class="text-5xl text-center font-handwrite tracking-wider">Load Your Playlist!</h2>
-      <p>Game not loaded</p>
-      <input bind:value={playlist}>
+    <div class="bg-dark-700 p-1 0 m-auto w-1/3 rounded-md h-72">
+      <h2 class="text-5xl text-center font-handwrite tracking-wider my-1">Load Your Playlist!</h2>
+      <h4 class="text-center text-xl font-thin my-3">Spotify <span class="font-semibold">Playlist-URL</span> or <span class="font-semibold">Playlist-ID</span></h4>
+      <div class="m-auto text-center">
+        <input type=text placeholder="Load the deck" class="p-2 text-dark-900 rounded-md h-10 w-60 border border-light-400 focus:border-sec-500 focus:ring-sec-500" bind:value={playlist}>
+      </div>
+    </div>
+      
     {/if}
 
   </div>
 </section>
 
 <style>
+    #bg {
+    z-index: -2;
+    opacity: 0.3;
+    min-height: 100%;
+    min-width: 1024px;
+    width: 100%;
+    height: auto;
+    position: fixed;
+    top: 0;
+    left: 0;
+  }
 
 </style>
