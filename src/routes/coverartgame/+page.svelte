@@ -1,5 +1,6 @@
 <script>
   let bgImage = "/bg.jpg";
+  let tapeImage = "/tape.webp"
 
   const Client_Id = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
   const Client_Secret = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET;
@@ -59,14 +60,16 @@
         <button class="w-40 h-20 rounded {album_guess !== 99 ? "bg-prim-500 text-dark-700" : "invisible"}  hover:bg-dark-100">Submit</button>
       </div>  
     {:else}
-    <div class="bg-dark-700 p-1 0 m-auto w-1/3 rounded-md h-72">
-      <h2 class="text-5xl text-center font-handwrite tracking-wider my-1">Load Your Playlist!</h2>
-      <h4 class="text-center text-xl font-thin my-3">Spotify <span class="font-semibold">Playlist-URL</span> or <span class="font-semibold">Playlist-ID</span></h4>
-      <div class="m-auto text-center">
-        <input type=text placeholder="Load the deck" class="p-2 text-dark-900 rounded-md h-10 w-60 border border-light-400 focus:border-sec-500 focus:ring-sec-500" bind:value={playlist}>
+    <div class="p-1 0 m-auto mt-40 w-1/3 rounded-md h-96 relative">
+      <img id="tape" src={tapeImage} alt="music tape"/>  
+      <h2 class="text-4xl text-center text-dark-900 font-handwrite tracking-wider my-1 absolute inset-x-0 top-12">Load Your Playlist!</h2>
+      <h4 class="text-center text-dark-700 text-xl font-thin my-3 absolute inset-x-0 top-20">Spotify <span class="font-semibold">Playlist-URL</span> or <span class="font-semibold">Playlist-ID</span></h4>
+      <div class="absolute inset-x-0 bottom-32 m-auto text-center">
+        <input type=text placeholder="Insert Playlist here" class="p-2 text-dark-900 rounded-md h-10 w-60 border border-light-400 focus:border-sec-500 focus:ring-sec-500" bind:value={playlist}>
+        <button class='w-28 h-9 bg-prim-500 rounded text-center text-ellipsis overflow-hidden hover:bg-prim-400'>Start Game</button>
       </div>
     </div>
-      
+    
     {/if}
 
   </div>
@@ -83,6 +86,14 @@
     position: fixed;
     top: 0;
     left: 0;
+  }
+  #tape{
+    z-index: -1;
+    height: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 
 </style>
