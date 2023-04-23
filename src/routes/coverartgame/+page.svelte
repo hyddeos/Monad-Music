@@ -1,4 +1,9 @@
 <script>
+  import { browser } from "$app/environment";
+
+  let bgImage = "/bg.jpg";
+  let tapeImage = "/tape.webp";
+
   const Client_Id = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
   const Client_Secret = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET;
   const Client_Refresh_token = import.meta.env.VITE_SPOTIFY_REFRESH_TOKEN;
@@ -35,6 +40,8 @@
   }
 
   async function getProfile() {
+    if (!browser) return;
+
     let accessToken = localStorage.getItem("access_token");
 
     if (!accessToken) return;
@@ -53,13 +60,14 @@
 </script>
 
 <section id="main_content" class="flex">
+  <img id="bg" src={bgImage} alt="consert background" />
   <div class="m-30 mx-auto w-full">
     <button on:click={login}>Log in with Spotify</button>
     <p>Current Guess: {album_guess}</p>
     <p>Current PL: {playlist}</p>
 
     {#if game_loaded}
-      <h2 class="text-5xl text-center font-handwrite tracking-wider">
+      <h2 class="text-5xl text-center font-handwrite tracking-wider my-2">
         What Album Is This? <span class="text-2xl text-light-300 text-right"
           >(1/10)</span
         >
@@ -96,14 +104,54 @@
         >
       </div>
     {:else}
-      <h2 class="text-5xl text-center font-handwrite tracking-wider">
-        Load Your Playlist!
-      </h2>
-      <p>Game not loaded</p>
-      <input bind:value={playlist} />
+      <div class="p-1 0 m-auto mt-40 w-1/3 rounded-md h-96 relative">
+        <img id="tape" src={tapeImage} alt="music tape" />
+        <h2
+          class="text-4xl text-center text-dark-900 font-handwrite tracking-wider my-1 absolute inset-x-0 top-12"
+        >
+          Load Your Playlist!
+        </h2>
+        <h4
+          class="text-center text-dark-700 text-xl font-thin my-3 absolute inset-x-0 top-20"
+        >
+          Spotify <span class="font-semibold">Playlist-URL</span> or
+          <span class="font-semibold">Playlist-ID</span>
+        </h4>
+        <div class="absolute inset-x-0 bottom-32 m-auto text-center">
+          <input
+            type="text"
+            placeholder="Insert Playlist here"
+            class="p-2 text-dark-900 rounded-md h-10 w-60 border border-light-400 focus:border-sec-500 focus:ring-sec-500"
+            bind:value={playlist}
+          />
+          <button
+            class="w-28 h-9 bg-prim-500 rounded text-center text-ellipsis overflow-hidden hover:bg-prim-400"
+            >Start Game</button
+          >
+        </div>
+      </div>
     {/if}
   </div>
 </section>
 
 <style>
+  #bg {
+    z-index: -2;
+    opacity: 0.3;
+    min-height: 100%;
+    min-width: 1024px;
+    width: 100%;
+    height: auto;
+    position: fixed;
+    top: 0;
+    left: 0;
+  }
+  #tape {
+    z-index: -1;
+    height: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
 </style>
