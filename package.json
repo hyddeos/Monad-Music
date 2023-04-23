@@ -9,17 +9,15 @@
   },
   "devDependencies": {
     "@sveltejs/adapter-auto": "^2.0.0",
-    "@sveltejs/kit": "^1.5.0",
+    "@sveltejs/kit": "^1.15.7",
     "autoprefixer": "^10.4.7",
     "postcss": "^8.4.14",
     "postcss-load-config": "^4.0.1",
     "svelte": "^3.54.0",
     "svelte-preprocess": "^4.10.7",
+    "svelte-spotify-web-playback": "^1.0.3",
     "tailwindcss": "^3.1.5",
     "vite": "^4.2.0"
   },
-  "type": "module",
-  "dependencies": {
-    "axios": "^1.3.5"
-  }
+  "type": "module"
 }

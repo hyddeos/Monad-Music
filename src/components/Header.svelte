@@ -59,6 +59,9 @@
         <a class="font-heading text-gray-800 hover:text-prim-400" href="/"
           >HOME</a
         >
+        <a class="font-heading text-gray-800 hover:text-prim-400" href="/auth"
+          >AUTH</a
+        >
         <a
           class="font-heading text-gray-800 hover:text-prim-400"
           href="/coverartgame">COVER ART GAME</a
