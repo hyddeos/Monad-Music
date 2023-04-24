@@ -4,6 +4,7 @@
 
   let bgImage = "/bg.jpg";
   let logo_w = "/logo_w.svg";
+  let logo_o = "/logo_o.svg";
   // Spotlight1
   let x1 = -200;
   let y1 = -200;
@@ -81,15 +82,15 @@
       : 'hidden'};"
   />
 
-  <section class="flex flex-row max-w-5xl m-auto pt-[20%] z-0">
-    <div class="basis-1/3 h-40 m-auto border-r-4 border-prim-400">
-      <img src={logo_w} class="h-40 m-auto" alt="Monad Music Logo" />
+  <section class="md:flex md:flex-row md:max-w-5xl m-auto pt-[15%] z-0">
+    <div class="basis-1/3 h-40 m-auto">
+      <img src={logo_o} class="h-40 m-auto" alt="Monad Music Logo" />
     </div>
     <div class="basis-2/3 h-40">
-      <h1 class="text-8xl font-heading text-right">
+      <h1 class="text-8xl font-heading text-center">
         MONAD MUSIC
         <h1>
-          <h3 class="text-4xl text-right font-handwrite tracking-wider">
+          <h3 class="text-4xl text-center md:text-center font-handwrite tracking-wider">
             - Play With Playlists
           </h3>
         </h1>
