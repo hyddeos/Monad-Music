@@ -12,7 +12,6 @@
   //
   // LAYOUT FOR GAME
   //
-  let authed = false;
   let game_loaded = false;
   let playlist = "";
   let albumcover = "https://www.bengans.se/bilder/artiklar/560029.jpg";
@@ -44,7 +43,6 @@
 
     if (!accessToken) return;
 
-    authed = true;
     const response = await fetch("https://api.spotify.com/v1/me", {
       headers: {
         Authorization: "Bearer " + accessToken,
@@ -62,7 +60,7 @@
 
 <section id="main_content" class="flex">
   <img id="bg" src={bgImage} alt="consert background" />
-  {#if authed}
+  {#if displayName}
     <div class="m-30 mx-auto w-full">
       <p>Current Guess: {album_guess}</p>
       <p>Current PL: {playlist}</p>
