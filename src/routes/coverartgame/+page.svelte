@@ -17,9 +17,15 @@
   let albumcover = "https://www.bengans.se/bilder/artiklar/560029.jpg";
   let album_guess = 99;
   let displayName = "";
+  let albums = [];
+  let album_numbers = [];
+  let question = 1;
+  let score_counter = 0;
+  console.log("uni, ", albums);
+  console.log("number counter, ", album_numbers.length);
 
   // Temp varibles
-  let albums = [
+  let sample_albums = [
     { id: 0, artist: "Cult of Luna", album: "Somewhere Along The Highway" },
     { id: 1, artist: "Amenra", album: "Mass III" },
     {
@@ -34,6 +40,46 @@
   function set_active_guess(album_id) {
     album_guess = album_id;
   }
+
+  // Filters albums so every Album-cover is Unique(ie remove duplets)
+  function filterAlbums(playlist_items) {
+    let temp_albums = [];
+    let album_ids = [];
+    playlist_items.forEach((playlist_item) => {
+      if (!album_ids.includes(playlist_item.track.album.id)) {
+        temp_albums.push(playlist_item);
+        album_ids.push(playlist_item.track.album.id);
+      }
+    });
+    return temp_albums;
+  }
+
+  function generateAlbumNumbers(albums) {
+    let numbers = [];
+    // If there is more then 10 unique albums
+    if (albums.length > 10) {
+      numbers = getUniqueRandomNumbers(10, 0, albums.length);
+    } else {
+      // Less then 11 unique albums
+      numbers = getUniqueRandomNumbers(albums.length, 0, albums.length);
+    }
+    return numbers;
+  }
+
+  function getUniqueRandomNumbers(count, min, max) {
+    let uniqueNumbers = [];
+    while (uniqueNumbers.length < count) {
+      let randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+
+      if (!uniqueNumbers.includes(randomNumber)) {
+        uniqueNumbers.push(randomNumber);
+      }
+    }
+    return uniqueNumbers;
+  }
+
+  let numbers = getUniqueRandomNumbers(10, 1, 100);
+  console.log(numbers);
 
   // Check if logged in and api request
   async function getProfile() {
@@ -54,8 +100,31 @@
 
     displayName = data.display_name;
   }
-
   getProfile();
+
+  async function getPlaylist(playlist_id) {
+    if (!browser) return;
+
+    let accessToken = localStorage.getItem("access_token");
+
+    if (!accessToken) return;
+
+    const response = await fetch(
+      "https://api.spotify.com/v1/playlists/37i9dQZF1F0sijgNaJdgit/tracks",
+      {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+        },
+      }
+    );
+
+    const data = await response.json();
+    console.log(data);
+    //Setting up game
+    albums = filterAlbums(data.items);
+    album_numbers = generateAlbumNumbers(albums);
+    game_loaded = true;
+  }
 </script>
 
 <section id="main_content" class="flex">
@@ -65,11 +134,11 @@
       <p>Current Guess: {album_guess}</p>
       <p>Current PL: {playlist}</p>
       <p>Current display name:{displayName}</p>
-
+      <p>Items: {albums}</p>
       {#if game_loaded}
         <h2 class="text-5xl text-center font-handwrite tracking-wider my-2">
           What Album Is This? <span class="text-2xl text-light-300 text-right"
-            >(1/10)</span
+            >({question}/{album_numbers.length})</span
           >
         </h2>
         <img
@@ -125,6 +194,7 @@
               bind:value={playlist}
             />
             <button
+              on:click={() => getPlaylist()}
               class="w-28 h-9 bg-prim-500 rounded text-center text-ellipsis overflow-hidden hover:bg-prim-400"
               >Start Game</button
             >
