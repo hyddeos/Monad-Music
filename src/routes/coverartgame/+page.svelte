@@ -17,29 +17,25 @@
   let albumcover = "https://www.bengans.se/bilder/artiklar/560029.jpg";
   let album_guess = 99;
   let displayName = "";
-  let albums = [];
-  let album_numbers = [];
-  let question = 1;
+  let questions = []
+  let current_question = 1;
   let score_counter = 0;
   console.log("uni, ", albums);
   console.log("number counter, ", album_numbers.length);
 
-  // Temp varibles
-  let sample_albums = [
-    { id: 0, artist: "Cult of Luna", album: "Somewhere Along The Highway" },
-    { id: 1, artist: "Amenra", album: "Mass III" },
-    {
-      id: 2,
-      artist: "Godspeed You! Black Emperor",
-      album: "Lift your skinny fist like antennas to the sky",
-    },
-    { id: 3, artist: "Fall of Efrafa", album: "Elil" },
-    { id: 4, artist: "Show Me A Dinosour", album: "Reke" },
-  ];
-
   function set_active_guess(album_id) {
     album_guess = album_id;
   }
+
+  function generate_questions(playlist_data) {
+    // Gets all Unique albums
+    let albums = filterAlbums(playlist_data);
+    // Gets Random numbers for albums(right awswer,
+    // Get All the album-covers
+    // Get random wrong answers(alternatives)
+    let album_numbers = generateAlbumNumbers(albums)
+  }
+   
 
   // Filters albums so every Album-cover is Unique(ie remove duplets)
   function filterAlbums(playlist_items) {
@@ -81,7 +77,7 @@
   let numbers = getUniqueRandomNumbers(10, 1, 100);
   console.log(numbers);
 
-  // Check if logged in and api request
+  // GET DISPLAYNAME FOR AUTH
   async function getProfile() {
     if (!browser) return;
 
@@ -102,6 +98,8 @@
   }
   getProfile();
 
+
+  // GET PLAYLIST FROM API
   async function getPlaylist(playlist_id) {
     if (!browser) return;
 
@@ -121,8 +119,7 @@
     const data = await response.json();
     console.log(data);
     //Setting up game
-    albums = filterAlbums(data.items);
-    album_numbers = generateAlbumNumbers(albums);
+    questions = generate_questions(data.items)
     game_loaded = true;
   }
 </script>
@@ -138,7 +135,7 @@
       {#if game_loaded}
         <h2 class="text-5xl text-center font-handwrite tracking-wider my-2">
           What Album Is This? <span class="text-2xl text-light-300 text-right"
-            >({question}/{album_numbers.length})</span
+            >({current_question}/{album_numbers.length})</span
           >
         </h2>
         <img
