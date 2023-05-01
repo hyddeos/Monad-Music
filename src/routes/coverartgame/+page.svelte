@@ -1,5 +1,7 @@
 <script>
   import { browser } from "$app/environment";
+  import CoverGame from "../../components/Cover_game.svelte";
+  import CoverGameOver from "../../components/Cover_game_over.svelte";
   import NotAuthed from "../../components/NotAuthed.svelte";
 
   let bgImage = "/bg.jpg";
@@ -14,28 +16,9 @@
   //
   let game_state = 0; // 0 = Not loaded, 1 = In progress, 2 = Game Finnished
   let playlist = "";
-  let active_guess = 99;
   let displayName = "";
   let questions = [];
-  let current_question = 0;
   let score_counter = 0;
-
-  function set_active_guess(album_id) {
-    active_guess = album_id;
-  }
-
-  function submit_guess(right_answer) {
-    console.log("Right:", right_answer, "submitted", active_guess);
-    if (active_guess == right_answer) {
-      score_counter++;
-    }
-    active_guess = 99; // Reset guess to non-guess value
-    if (current_question == questions.length) {
-      game_state = 2;
-    } else {
-      current_question++;
-    }
-  }
 
   function generate_questions(playlist_data) {
     let albums = filterAlbums(playlist_data); // Gets all Unique albums
@@ -45,7 +28,6 @@
     let question_holder = [];
     for (let i = 0; i < album_numbers.length; i++) {
       // Generate numbers for wrong answser and make sure the right answer is not there
-
       let alternatives_numbers = generateAlbumNumbers(albums);
       while (alternatives_numbers.includes(album_numbers[i])) {
         alternatives_numbers = generateAlbumNumbers(albums);
@@ -166,6 +148,7 @@
     //Setting up game
     questions = generate_questions(data.items);
     game_state = 1; // 1 = Inprogress
+    console.log("questions:", questions);
   }
 </script>
 
@@ -173,46 +156,11 @@
   <img id="bg" src={bgImage} alt="consert background" />
   {#if displayName}
     <div class="m-30 mx-auto w-full">
-      <p>Current Guess: {active_guess}</p>
       <p>Current display name:{displayName}</p>
       {#if game_state == 1}
-        <h2 class="text-5xl text-center font-handwrite tracking-wider my-2">
-          What Album Is This? <span class="text-2xl text-light-300 text-right"
-            >({current_question + 1}/{questions.length})</span
-          >
-        </h2>
-        <img
-          class="m-auto p-5 w-1/5"
-          src={questions[current_question].cover}
-          alt="Guess this album cover"
-        />
-        <div class="w-full flex flex-wrap justify-center px-2">
-          {#each questions[current_question].albums[0] as album}
-            <div class="p-2">
-              <button
-                on:click={() => set_active_guess(album[0].album_id)}
-                class="w-80 h-40 rounded {active_guess === album[0].album_id
-                  ? 'bg-dark-200 text-dark-700'
-                  : 'bg-dark-700'} text-center text-ellipsis overflow-hidden hover:bg-dark-100 hover:text-dark-700"
-              >
-                <h3 class="font-bold text-xl p-1">
-                  {album[0].album}
-                  <h3>
-                    <h4 class="font-thin p-1">{album[0].artist}</h4>
-                  </h3>
-                </h3></button
-              >
-            </div>
-          {/each}
-        </div>
-        <div class="m-auto text-center">
-          <button
-            on:click={() => submit_guess(questions[current_question].answer)}
-            class="w-40 h-20 rounded {active_guess !== 99
-              ? 'bg-prim-500 text-dark-700'
-              : 'invisible'}  hover:bg-dark-100">Submit</button
-          >
-        </div>
+        <CoverGame {questions} />
+      {:else if game_state == 2}
+        <CoverGameOver score={score_counter} questions={questions.length} />
       {:else}
         <div class="p-1 0 m-auto mt-40 w-1/3 rounded-md h-96 relative">
           <img id="tape" src={tapeImage} alt="music tape" />
