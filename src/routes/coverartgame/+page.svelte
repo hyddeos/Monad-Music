@@ -12,16 +12,29 @@
   //
   // LAYOUT FOR GAME
   //
-  let game_loaded = false;
+  let game_state = 0; // 0 = Not loaded, 1 = In progress, 2 = Game Finnished
   let playlist = "";
-  let album_guess = 99;
+  let active_guess = 99;
   let displayName = "";
   let questions = [];
   let current_question = 0;
   let score_counter = 0;
 
   function set_active_guess(album_id) {
-    album_guess = album_id;
+    active_guess = album_id;
+  }
+
+  function submit_guess(right_answer) {
+    console.log("Right:", right_answer, "submitted", active_guess);
+    if (active_guess == right_answer) {
+      score_counter++;
+    }
+    active_guess = 99; // Reset guess to non-guess value
+    if (current_question == questions.length) {
+      game_state = 2;
+    } else {
+      current_question++;
+    }
   }
 
   function generate_questions(playlist_data) {
@@ -32,6 +45,7 @@
     let question_holder = [];
     for (let i = 0; i < album_numbers.length; i++) {
       // Generate numbers for wrong answser and make sure the right answer is not there
+
       let alternatives_numbers = generateAlbumNumbers(albums);
       while (alternatives_numbers.includes(album_numbers[i])) {
         alternatives_numbers = generateAlbumNumbers(albums);
@@ -47,13 +61,14 @@
           {
             artist: albums[number].track.artists[0].name,
             album: albums[number].track.album.name,
+            album_id: number,
           },
         ]);
       });
       // Add all the date to the questions
       question_holder.push({
-        id: i + 1,
-        answer: albums[album_numbers[i]].track.album.name,
+        question_id: i + 1,
+        answer: album_numbers[i],
         cover: albums[album_numbers[i]].track.album.images[0].url,
         albums: [alternatives],
       });
@@ -61,7 +76,7 @@
     return question_holder;
   }
 
-  // Filters albums so every Album-cover is Unique(ie remove duplets)
+  // Filters albums so every Album-cover is Unique(I.E remove duplets)
   function filterAlbums(playlist_items) {
     let temp_albums = [];
     let album_ids = [];
@@ -108,7 +123,7 @@
     return array;
   }
 
-  // GET DISPLAYNAME FOR AUTH
+  // GET DISPLAYNAME FOR AUTH.. Remove later
   async function getProfile() {
     if (!browser) return;
 
@@ -150,9 +165,7 @@
     console.log(data);
     //Setting up game
     questions = generate_questions(data.items);
-    console.log("questions", questions);
-
-    game_loaded = true;
+    game_state = 1; // 1 = Inprogress
   }
 </script>
 
@@ -160,13 +173,12 @@
   <img id="bg" src={bgImage} alt="consert background" />
   {#if displayName}
     <div class="m-30 mx-auto w-full">
-      <p>Current Guess: {album_guess}</p>
+      <p>Current Guess: {active_guess}</p>
       <p>Current display name:{displayName}</p>
-      <p>Items:</p>
-      {#if game_loaded}
+      {#if game_state == 1}
         <h2 class="text-5xl text-center font-handwrite tracking-wider my-2">
           What Album Is This? <span class="text-2xl text-light-300 text-right"
-            >({current_question}/{questions.length})</span
+            >({current_question + 1}/{questions.length})</span
           >
         </h2>
         <img
@@ -178,8 +190,8 @@
           {#each questions[current_question].albums[0] as album}
             <div class="p-2">
               <button
-                on:click={() => set_active_guess(album.id)}
-                class="w-80 h-40 rounded {album_guess === album.id
+                on:click={() => set_active_guess(album[0].album_id)}
+                class="w-80 h-40 rounded {active_guess === album[0].album_id
                   ? 'bg-dark-200 text-dark-700'
                   : 'bg-dark-700'} text-center text-ellipsis overflow-hidden hover:bg-dark-100 hover:text-dark-700"
               >
@@ -195,7 +207,8 @@
         </div>
         <div class="m-auto text-center">
           <button
-            class="w-40 h-20 rounded {album_guess !== 99
+            on:click={() => submit_guess(questions[current_question].answer)}
+            class="w-40 h-20 rounded {active_guess !== 99
               ? 'bg-prim-500 text-dark-700'
               : 'invisible'}  hover:bg-dark-100">Submit</button
           >
