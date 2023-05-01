@@ -17,56 +17,48 @@
   let album_guess = 99;
   let displayName = "";
   let questions = [];
-  let current_question = 1;
+  let current_question = 0;
   let score_counter = 0;
-  let albums = []; // Remove later
 
   function set_active_guess(album_id) {
     album_guess = album_id;
   }
 
   function generate_questions(playlist_data) {
-    // Gets all Unique albums
-    let albums = filterAlbums(playlist_data);
-    // Gets Random numbers for albums(right awswer,
-    // Get All the album-covers
-    // Get random wrong answers(alternatives)
+    let albums = filterAlbums(playlist_data); // Gets all Unique albums
+    // Gets Random numbers for albums(right awswer)
+    // Get All the album-covers, Get random wrong answers(alternatives)
     let album_numbers = generateAlbumNumbers(albums);
+    let question_holder = [];
     for (let i = 0; i < album_numbers.length; i++) {
       // Generate numbers for wrong answser and make sure the right answer is not there
       let alternatives_numbers = generateAlbumNumbers(albums);
       while (alternatives_numbers.includes(album_numbers[i])) {
         alternatives_numbers = generateAlbumNumbers(albums);
       }
-      console.log("albums", albums);
-      console.log("alt nr", alternatives_numbers);
 
+      alternatives_numbers = alternatives_numbers.slice(0, 4); // Just take the first 4 as alternative guesses
+      alternatives_numbers.push(album_numbers[i]); // Add right one back in and shuffle the list
+      alternatives_numbers = shuffleList(alternatives_numbers);
+
+      let alternatives = [];
+      alternatives_numbers.forEach((number) => {
+        alternatives.push([
+          {
+            artist: albums[number].track.artists[0].name,
+            album: albums[number].track.album.name,
+          },
+        ]);
+      });
       // Add all the date to the questions
-      questions.push({
+      question_holder.push({
         id: i + 1,
+        answer: albums[album_numbers[i]].track.album.name,
         cover: albums[album_numbers[i]].track.album.images[0].url,
-        right: [
-          {
-            album: albums[album_numbers[i]].track.album.name,
-            artist: albums[album_numbers[i]].track.artists[0].name,
-          },
-        ],
-        alternatives: [
-          {
-            album_a: albums[alternatives_numbers[0]].track.album.name, // 1
-            artist_a: albums[alternatives_numbers[0]].track.artists[0].name,
-            album_b: albums[alternatives_numbers[1]].track.album.name, // 2
-            artist_b: albums[alternatives_numbers[1]].track.artists[0].name,
-            album_c: albums[alternatives_numbers[2]].track.album.name, // 3
-            artist_c: albums[alternatives_numbers[2]].track.artists[0].name,
-            album_d: albums[alternatives_numbers[3]].track.album.name, // 4
-            artist_d: albums[alternatives_numbers[3]].track.artists[0].name,
-          },
-        ],
+        albums: [alternatives],
       });
     }
-    console.log("questions", questions);
-    game_loaded = true;
+    return question_holder;
   }
 
   // Filters albums so every Album-cover is Unique(ie remove duplets)
@@ -86,10 +78,10 @@
     let numbers = [];
     // If there is more then 10 unique albums
     if (albums.length > 10) {
-      numbers = getUniqueRandomNumbers(10, 0, albums.length);
+      numbers = getUniqueRandomNumbers(10, 0, albums.length - 1);
     } else {
       // Less then 11 unique albums
-      numbers = getUniqueRandomNumbers(albums.length, 0, albums.length);
+      numbers = getUniqueRandomNumbers(albums.length, 0, albums.length - 1);
     }
     return numbers;
   }
@@ -104,6 +96,16 @@
       }
     }
     return uniqueNumbers;
+  }
+
+  function shuffleList(array) {
+    for (var i = array.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var temp = array[i];
+      array[i] = array[j];
+      array[j] = temp;
+    }
+    return array;
   }
 
   // GET DISPLAYNAME FOR AUTH
@@ -148,6 +150,9 @@
     console.log(data);
     //Setting up game
     questions = generate_questions(data.items);
+    console.log("questions", questions);
+
+    game_loaded = true;
   }
 </script>
 
@@ -161,12 +166,16 @@
       {#if game_loaded}
         <h2 class="text-5xl text-center font-handwrite tracking-wider my-2">
           What Album Is This? <span class="text-2xl text-light-300 text-right"
-            >({current_question}/Insert later)</span
+            >({current_question}/{questions.length})</span
           >
         </h2>
-        <img class="m-auto p-5 w-1/5" src="" alt="Guess this album cover" />
+        <img
+          class="m-auto p-5 w-1/5"
+          src={questions[current_question].cover}
+          alt="Guess this album cover"
+        />
         <div class="w-full flex flex-wrap justify-center px-2">
-          {#each albums as album}
+          {#each questions[current_question].albums[0] as album}
             <div class="p-2">
               <button
                 on:click={() => set_active_guess(album.id)}
@@ -175,9 +184,9 @@
                   : 'bg-dark-700'} text-center text-ellipsis overflow-hidden hover:bg-dark-100 hover:text-dark-700"
               >
                 <h3 class="font-bold text-xl p-1">
-                  {album.album}
+                  {album[0].album}
                   <h3>
-                    <h4 class="font-thin p-1">{album.artist}</h4>
+                    <h4 class="font-thin p-1">{album[0].artist}</h4>
                   </h3>
                 </h3></button
               >
