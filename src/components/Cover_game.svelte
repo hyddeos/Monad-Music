@@ -1,5 +1,6 @@
 <script>
   export let questions;
+  export let game_over = 1;
 
   let active_guess = 99;
   let current_question = 0;
@@ -12,7 +13,7 @@
   function submit_guess(right_answer) {
     // Check if game is over
     if (current_question + 1 == questions.length) {
-      game_state = 2;
+      game_over = 2;
     } else {
       current_question++;
     }

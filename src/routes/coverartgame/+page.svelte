@@ -125,13 +125,13 @@
     else if (playlist_input.length > 20 && playlist_input.length < 25) {
       const regex = /^[a-zA-Z0-9]*$/gm;
       let m;
-      while ((m = regex.exec(playlist_input)) !== null) {
-          // The result can be accessed through the `m`-variable.
-          m.forEach((match, groupIndex) => {
-              playlist_id = m;
-          });
+      if ((m = regex.exec(playlist_input)) !== null) {
+        m.forEach((match, groupIndex) => {
+            console.log(`URL Found match, group ${groupIndex}: ${match}`, m);
+            playlist_id = m;            
+        });
       }
-      if (!check) {
+      else {
         error_message = "You need to insert a vaild Spotify Playlist link or ID";
       }
     }
@@ -207,8 +207,9 @@
   {#if displayName}
     <div class="m-30 mx-auto w-full">
       <p>Current display name:{displayName}</p>
+      <p>Test url: https://open.spotify.com/playlist/37i9dQZF1EjgFGmwQdFGA3</p>
       {#if game_state == 1}
-        <CoverGame {questions} />
+        <CoverGame {questions} bind:game_over={game_state}/>
       {:else if game_state == 2}
         <CoverGameOver score={score_counter} questions={questions.length} />
       {:else}
@@ -238,7 +239,6 @@
               >Start Game</button
             >
             <p class="text-[#c94242]">{error_message}</p>
-            <p>Test url: https://open.spotify.com/playlist/37i9dQZF1EjgFGmwQdFGA3</p>
           </div>
         </div>
       {/if}

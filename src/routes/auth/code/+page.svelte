@@ -4,7 +4,7 @@
   import { claim_svg_element } from "svelte/internal";
   let code;
   let codeVerifier;
-  const redirectUri = "http://localhost:5173/auth/code";
+  const redirectUri = "http://localhost:5173/";
   const client_id = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
 
   if (browser) {

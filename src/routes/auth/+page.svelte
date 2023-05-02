@@ -5,7 +5,7 @@
   const client_id = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
   const client_secret = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET;
   const client_refresh_token = import.meta.env.VITE_SPOTIFY_REFRESH_TOKEN;
-  const redirectUri = "http://localhost:5173/auth/code";
+  const redirectUri = "http://localhost:5173/";
 
   function generateRandomString(length) {
     let text = "";
@@ -59,20 +59,12 @@
       code_challenge_method: "S256",
       code_challenge: codeChallenge,
     });
-    /*
-    // set cookie with code_verifier
-    setCookie("code_verifier", codeVerifier, { path: "/auth" });
-    */
+
     console.log("ARGS:", args);
     if (browser) {
       localStorage.setItem("code_verifier", codeVerifier);
 
       goto("https://accounts.spotify.com/authorize?" + args);
     }
-
-    // window.location = "https://accounts.spotify.com/authorize?" + args;
   });
 </script>
-
-<p>client_id {client_id}</p>
-<p>Random string:</p>

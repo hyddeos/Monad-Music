@@ -89,12 +89,10 @@
     <div class="basis-2/3 h-40">
       <h1 class="text-8xl font-heading text-center">
         MONAD MUSIC
-        <h1>
-          <h3 class="text-4xl text-center md:text-center font-handwrite tracking-wider">
-            - Play With Playlists
-          </h3>
-        </h1>
       </h1>
+        <h3 class="text-4xl text-center md:text-center font-handwrite tracking-wider">
+          - Play With Playlists
+        </h3>
     </div>
   </section>
 </section>
