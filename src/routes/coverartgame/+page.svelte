@@ -12,10 +12,11 @@
   const Client_Refresh_token = import.meta.env.VITE_SPOTIFY_REFRESH_TOKEN;
 
   let game_state = 0; // 0 = Not loaded, 1 = In progress, 2 = Game Finnished
-  let playlist = "";
+  let playlist_input = "";
   let displayName = "";
   let questions = [];
   let score_counter = 0;
+  let error_message = "";
 
   function generate_questions(playlist_data) {
     let albums = filterAlbums(playlist_data); // Gets all Unique albums
@@ -102,6 +103,45 @@
     return array;
   }
 
+  function input_check(playlist_input) {
+    let playlist_id = "";
+
+    if (playlist_input.length == 0){
+      error_message = "Can´t be empty, Type a vaild Spotify Playlist link or ID";
+    }
+    else if (playlist_input.includes("spotify")){
+      const regex = /\w+$/;
+      let m;
+      if ((m = regex.exec(playlist_input)) !== null) {
+        m.forEach((match, groupIndex) => {
+            console.log(`URL Found match, group ${groupIndex}: ${match}`, m);
+            playlist_id = m;            
+        });
+      }
+      else {
+        error_message = "You need to insert a vaild Spotify Playlist link or ID";
+      }
+    }
+    else if (playlist_input.length > 20 && playlist_input.length < 25) {
+      const regex = /^[a-zA-Z0-9]*$/gm;
+      let m;
+      while ((m = regex.exec(playlist_input)) !== null) {
+          // The result can be accessed through the `m`-variable.
+          m.forEach((match, groupIndex) => {
+              playlist_id = m;
+          });
+      }
+      if (!check) {
+        error_message = "You need to insert a vaild Spotify Playlist link or ID";
+      }
+    }
+    else{
+      error_message = "You need to insert a vaild Spotify Playlist link or ID";
+    }
+
+    return playlist_id;
+  }
+
   // GET DISPLAYNAME FOR AUTH.. Remove later
   async function getProfile() {
     if (!browser) return;
@@ -123,9 +163,16 @@
   }
   getProfile();
 
+
+
   // GET PLAYLIST FROM API
-  async function getPlaylist(playlist_id) {
+  async function getPlaylist(playlist_input) {
+
     if (!browser) return;
+    if (!input_check(playlist_input)) return;
+    let playlist_id = input_check(playlist_input);
+    
+    error_message = "";
 
     let accessToken = localStorage.getItem("access_token");
 
@@ -133,20 +180,9 @@
 
     // Get playlist ID from url
     let playlist_url = "";
-    if (playlist_url.length < 30) {
       playlist_url = `https://api.spotify.com/v1/playlists/${playlist_id}/tracks`;
-    }      
-    else {
-      const regex = /\w+$/;
 
-      if ((playlist_url = regex.exec(playlist_id)) !== null) {
-          // The result can be accessed through the `m`-variable.
-          playlist_url.forEach((match, groupIndex) => {
-              console.log(`Found match, group ${groupIndex}: ${match}`);
-          });
-      }
-    }
-    console.log("Submitted url", playlist_url);
+    console.log("Submitted url", playlist_url, "playlist input", playlist_input, "p id", playlist_id);
 
     const response = await fetch(
       playlist_url,
@@ -194,13 +230,14 @@
               type="text"
               placeholder="Insert Playlist here"
               class="p-2 text-dark-900 rounded-md h-10 w-60 border border-light-400 focus:border-sec-500 focus:ring-sec-500"
-              bind:value={playlist}
+              bind:value={playlist_input}
             />
             <button
-              on:click={() => getPlaylist()}
+              on:click={() => getPlaylist(playlist_input)}
               class="w-28 h-9 bg-prim-500 rounded text-center text-ellipsis overflow-hidden hover:bg-prim-400"
               >Start Game</button
             >
+            <p class="text-[#c94242]">{error_message}</p>
             <p>Test url: https://open.spotify.com/playlist/37i9dQZF1EjgFGmwQdFGA3</p>
           </div>
         </div>
