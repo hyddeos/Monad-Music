@@ -68,7 +68,7 @@
         >
         <a
           class="font-heading text-gray-800 hover:text-prim-400"
-          href="/chooser">MUSIC CHOOSER</a
+          href="/ultimateplaylist">ULTIMATE PLAYLIST</a
         >
       </div>
     </nav>

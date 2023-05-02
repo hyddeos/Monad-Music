@@ -11,9 +11,6 @@
   const Client_Secret = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET;
   const Client_Refresh_token = import.meta.env.VITE_SPOTIFY_REFRESH_TOKEN;
 
-  //
-  // LAYOUT FOR GAME
-  //
   let game_state = 0; // 0 = Not loaded, 1 = In progress, 2 = Game Finnished
   let playlist = "";
   let displayName = "";
@@ -134,8 +131,25 @@
 
     if (!accessToken) return;
 
+    // Get playlist ID from url
+    let playlist_url = "";
+    if (playlist_url.length < 30) {
+      playlist_url = `https://api.spotify.com/v1/playlists/${playlist_id}/tracks`;
+    }      
+    else {
+      const regex = /\w+$/;
+
+      if ((playlist_url = regex.exec(playlist_id)) !== null) {
+          // The result can be accessed through the `m`-variable.
+          playlist_url.forEach((match, groupIndex) => {
+              console.log(`Found match, group ${groupIndex}: ${match}`);
+          });
+      }
+    }
+    console.log("Submitted url", playlist_url);
+
     const response = await fetch(
-      "https://api.spotify.com/v1/playlists/37i9dQZF1F0sijgNaJdgit/tracks",
+      playlist_url,
       {
         headers: {
           Authorization: "Bearer " + accessToken,
@@ -187,6 +201,7 @@
               class="w-28 h-9 bg-prim-500 rounded text-center text-ellipsis overflow-hidden hover:bg-prim-400"
               >Start Game</button
             >
+            <p>Test url: https://open.spotify.com/playlist/37i9dQZF1EjgFGmwQdFGA3</p>
           </div>
         </div>
       {/if}
