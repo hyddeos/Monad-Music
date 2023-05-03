@@ -1,15 +1,23 @@
 <script>
   import { browser } from "$app/environment";
+  import { goto } from '$app/navigation';
+  import AuthGetAccessToken from "../../components/Auth_get_access_token.svelte";
   import CoverGame from "../../components/Cover_game.svelte";
   import CoverGameOver from "../../components/Cover_game_over.svelte";
   import NotAuthed from "../../components/NotAuthed.svelte";
 
+  // AUTH
+  let accessToken = "";
+  function run_auth_check() {
+    if (!browser) return;
+      accessToken = localStorage.getItem("access_token");
+      console.log("token page:", accessToken)
+    if (!accessToken) return;
+  }
+  run_auth_check();
+  
   let bgImage = "/bg.jpg";
   let tapeImage = "/tape.webp";
-
-  const Client_Id = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
-  const Client_Secret = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET;
-  const Client_Refresh_token = import.meta.env.VITE_SPOTIFY_REFRESH_TOKEN;
 
   let game_state = 0; // 0 = Not loaded, 1 = In progress, 2 = Game Finnished
   let playlist_input = "";
@@ -114,7 +122,6 @@
       let m;
       if ((m = regex.exec(playlist_input)) !== null) {
         m.forEach((match, groupIndex) => {
-            console.log(`URL Found match, group ${groupIndex}: ${match}`, m);
             playlist_id = m;            
         });
       }
@@ -127,7 +134,6 @@
       let m;
       if ((m = regex.exec(playlist_input)) !== null) {
         m.forEach((match, groupIndex) => {
-            console.log(`URL Found match, group ${groupIndex}: ${match}`, m);
             playlist_id = m;            
         });
       }
@@ -143,6 +149,7 @@
   }
 
   // GET DISPLAYNAME FOR AUTH.. Remove later
+  /*
   async function getProfile() {
     if (!browser) return;
 
@@ -162,6 +169,7 @@
     displayName = data.display_name;
   }
   getProfile();
+  */
 
 
 
@@ -182,8 +190,6 @@
     let playlist_url = "";
       playlist_url = `https://api.spotify.com/v1/playlists/${playlist_id}/tracks`;
 
-    console.log("Submitted url", playlist_url, "playlist input", playlist_input, "p id", playlist_id);
-
     const response = await fetch(
       playlist_url,
       {
@@ -194,7 +200,10 @@
     );
 
     const data = await response.json();
-    console.log(data);
+    console.log("reponse", data);
+    if (data.error.status === 401) {
+      console.log("Token expired...Fetching you a new one");
+    }
     //Setting up game
     questions = generate_questions(data.items);
     game_state = 1; // 1 = Inprogress
@@ -204,9 +213,8 @@
 
 <section id="main_content" class="flex">
   <img id="bg" src={bgImage} alt="consert background" />
-  {#if displayName}
+  {#if accessToken}
     <div class="m-30 mx-auto w-full">
-      <p>Current display name:{displayName}</p>
       <p>Test url: https://open.spotify.com/playlist/37i9dQZF1EjgFGmwQdFGA3</p>
       {#if game_state == 1}
         <CoverGame {questions} bind:game_over={game_state}/>

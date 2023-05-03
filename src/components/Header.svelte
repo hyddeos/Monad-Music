@@ -1,5 +1,7 @@
 <script>
-  import { browser } from "$app/environment";
+  export let accessToken;
+  console.log("token head:", accessToken)
+  
   //MENU 
   let logo_w = "/logo_w.svg";
   let logo_o = "/logo_o.svg";
@@ -10,16 +12,6 @@
   function toggleNavbar() {
     showMenu = !showMenu;
   }
-  // AUTH
-  let authed = false;
-  function run_auth_check() {
-    if (!browser) return;
-    let accessToken = localStorage.getItem("access_token");
-    if (!accessToken) return;
-    authed = true;
-  }
-  run_auth_check();
-
 </script>
 
 <div class="container mx-auto w-full z-30">
@@ -82,7 +74,7 @@
         >
       </div>
       <div>
-        {#if authed}
+        {#if accessToken}
         <p>You are <span class="font-heading text-[#42c968]">AUTHED</span></p>
         {:else}
         <p>        You are
