@@ -1,18 +1,15 @@
 <script>
   import { browser } from "$app/environment";
-  
-
+  import { goto } from "$app/navigation";
+  import { claim_svg_element } from "svelte/internal";
   let code;
   let codeVerifier;
-  const redirectUri = "http://localhost:5173/";
+  const redirectUri = "http://localhost:5173/auth/code/";
   const client_id = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
-
   if (browser) {
     const urlParams = new URLSearchParams(window.location.search);
     code = urlParams.get("code");
-
     codeVerifier = localStorage.getItem("code_verifier");
-
     const body = new URLSearchParams({
       grant_type: "authorization_code",
       code: code,
@@ -20,10 +17,8 @@
       client_id: client_id,
       code_verifier: codeVerifier,
     });
-
     fetchAccessToken(body);
   }
-
   async function fetchAccessToken(body) {
     const response = fetch("https://accounts.spotify.com/api/token", {
       method: "POST",

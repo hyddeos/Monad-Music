@@ -75,7 +75,8 @@
       </div>
       <div>
         {#if accessToken}
-        <p>You are <span class="font-heading text-[#42c968]">AUTHED</span></p>
+        <p>You are <span class="font-heading text-[#42c968]">AUTHED</span></p>          <a class="font-heading text-sec-500 hover:text-prim-400" href="/auth"
+        >NOT AUTHED</a>
         {:else}
         <p>        You are
           <a class="font-heading text-sec-500 hover:text-prim-400" href="/auth"

@@ -197,17 +197,17 @@
         },
       }
     );
+    const data = await response.json()
+      .then((data) => {
+        //Setting up game
+        questions = generate_questions(data.items);
+        game_state = 1; // 1 = Inprogress
+        console.log("questions:", questions);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
 
-    const data = await response.json();
-    console.log("reponse", data);
-    if (data.error.status === 401) {
-      goto('/auth')
-      console.log("Token expired...Fetching you a new one");
-    }
-    //Setting up game
-    questions = generate_questions(data.items);
-    game_state = 1; // 1 = Inprogress
-    console.log("questions:", questions);
   }
 </script>
 
