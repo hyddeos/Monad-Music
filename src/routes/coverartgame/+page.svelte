@@ -229,6 +229,23 @@
           {error_message}
         </p>
       </div>
+      <div
+        class="max-w-lg m-auto bg-dark-900 p-6 flex flex-col items-center rounded border-2 border-dark-700"
+      >
+        <h2
+          class="text-xl text-center text-light-200 font-handwrite tracking-wider my-1"
+        >
+          Too Easy?
+        </h2>
+        <h2
+          class="text-3xl text-center text-light-200 font-heading tracking-wider my-1"
+        >
+          TRY HARD MODE!
+        </h2>
+        <p class="text-center m-4">
+          You will only see a part of the album-cover
+        </p>
+      </div>
     {/if}
   </div>
 </section>

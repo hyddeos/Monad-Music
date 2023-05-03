@@ -30,12 +30,15 @@
     >({current_question + 1}/{questions.length})</span
   >
 </h2>
-<img
-  id="hard-mode"
-  class="m-auto p-5 w-1/5"
-  src={questions[current_question].cover}
-  alt="Guess this album cover"
-/>
+<div class="m-auto" id="image_holder">
+  <img
+    id="hard-mode"
+    class=""
+    src={questions[current_question].cover}
+    alt="Guess this album cover"
+  />
+</div>
+
 <div class="w-full flex flex-wrap justify-center px-2">
   {#each questions[current_question].albums[0] as album}
     <div class="p-2">
@@ -65,7 +68,33 @@
 </div>
 
 <style>
+  #image_holder {
+    width: 640px;
+    height: 640px;
+    overflow: hidden;
+  }
+  #std-mode {
+    -moz-transform: scale(1);
+    -o-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1);
+  }
+  #easy-mode {
+    -moz-transform: scale(1.3);
+    -o-transform: scale(1.3);
+    -ms-transform: scale(1.3);
+    transform: scale(1.3);
+  }
+  #medium-mode {
+    -moz-transform: scale(2);
+    -o-transform: scale(2);
+    -ms-transform: scale(2);
+    transform: scale(2);
+  }
   #hard-mode {
-    clip: rect(0px, 60px, 200px, 0px);
+    -moz-transform: scale(3);
+    -o-transform: scale(3);
+    -ms-transform: scale(3);
+    transform: scale(3);
   }
 </style>
