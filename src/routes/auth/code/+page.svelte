@@ -1,7 +1,7 @@
 <script>
   import { browser } from "$app/environment";
-  import { goto } from "$app/navigation";
-  import { claim_svg_element } from "svelte/internal";
+  
+
   let code;
   let codeVerifier;
   const redirectUri = "http://localhost:5173/";

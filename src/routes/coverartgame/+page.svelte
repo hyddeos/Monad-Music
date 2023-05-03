@@ -1,7 +1,6 @@
 <script>
   import { browser } from "$app/environment";
-  import { goto } from '$app/navigation';
-  import AuthGetAccessToken from "../../components/Auth_get_access_token.svelte";
+  import { goto } from "$app/navigation";
   import CoverGame from "../../components/Cover_game.svelte";
   import CoverGameOver from "../../components/Cover_game_over.svelte";
   import NotAuthed from "../../components/NotAuthed.svelte";
@@ -202,6 +201,7 @@
     const data = await response.json();
     console.log("reponse", data);
     if (data.error.status === 401) {
+      goto('/auth')
       console.log("Token expired...Fetching you a new one");
     }
     //Setting up game

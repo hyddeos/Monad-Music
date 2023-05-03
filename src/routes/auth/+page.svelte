@@ -5,6 +5,50 @@
   const client_id = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
   const redirectUri = "http://localhost:5173/";
 
+  let codeVerifier = "";
+
+if (codeVerifier) {
+  if (browser) {
+    const urlParams = new URLSearchParams(window.location.search);
+    code = urlParams.get("code");
+
+    codeVerifier = localStorage.getItem("code_verifier");
+
+    const body = new URLSearchParams({
+      grant_type: "authorization_code",
+      code: code,
+      redirect_uri: redirectUri,
+      client_id: client_id,
+      code_verifier: codeVerifier,
+  });
+
+  fetchAccessToken(body);
+}
+
+  async function fetchAccessToken(body) {
+    const response = fetch("https://accounts.spotify.com/api/token", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: body,
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("HTTP status " + response.status);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        localStorage.setItem("access_token", data.access_token);
+        console.log("NEW TOKEN", data.access_token)
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
+}
+else {
   function generateRandomString(length) {
     let text = "";
     let possible =
@@ -34,7 +78,6 @@
         .replace(/\//g, "_")
         .replace(/=+$/, "");
     }
-
     const encoder = new TextEncoder();
     const data = encoder.encode(codeVerifier);
     const digest = await crypto.subtle.digest("SHA-256", data);
@@ -42,7 +85,7 @@
     return base64encode(digest);
   }
 
-  let codeVerifier = generateRandomString(128);
+  codeVerifier = generateRandomString(128);
 
   generateCodeChallenge(codeVerifier).then(async (codeChallenge) => {
     let state = generateRandomString(16);
@@ -64,5 +107,6 @@
 
       goto("https://accounts.spotify.com/authorize?" + args);
     }
-  });
+  }
+};
 </script>
