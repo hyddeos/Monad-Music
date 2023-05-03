@@ -1,8 +1,7 @@
 <script>
-  function Auth() {}
 </script>
 
-<div class="m-auto pt-[15%]">
+<div class="m-auto pt-[15%] z-10 max-w">
   <div
     class="bg-dark-900 p-6 flex flex-col items-center rounded border-2 border-dark-700"
   >
@@ -20,5 +19,8 @@
         >Sign In</button
       ></a
     >
+    <p class="text-center m-4">
+      You might have to do this again if the access token times out
+    </p>
   </div>
 </div>

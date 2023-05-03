@@ -5,24 +5,15 @@
   import CoverGameOver from "../../components/Cover_game_over.svelte";
   import NotAuthed from "../../components/NotAuthed.svelte";
 
-  // AUTH
-  let accessToken = "";
-  function run_auth_check() {
-    if (!browser) return;
-      accessToken = localStorage.getItem("access_token");
-      console.log("token page:", accessToken)
-    if (!accessToken) return;
-  }
-  run_auth_check();
-  
   let bgImage = "/bg.jpg";
   let tapeImage = "/tape.webp";
 
   let game_state = 0; // 0 = Not loaded, 1 = In progress, 2 = Game Finnished
+  let need_new_token = false;
   let playlist_input = "";
   let displayName = "";
   let questions = [];
-  let score_counter = 0;
+  let total_score;
   let error_message = "";
 
   function generate_questions(playlist_data) {
@@ -113,147 +104,133 @@
   function input_check(playlist_input) {
     let playlist_id = "";
 
-    if (playlist_input.length == 0){
-      error_message = "Can´t be empty, Type a vaild Spotify Playlist link or ID";
-    }
-    else if (playlist_input.includes("spotify")){
+    if (playlist_input.length == 0) {
+      error_message =
+        "Can´t be empty, Type a vaild Spotify Playlist link or ID";
+    } else if (playlist_input.includes("spotify")) {
       const regex = /\w+$/;
       let m;
       if ((m = regex.exec(playlist_input)) !== null) {
         m.forEach((match, groupIndex) => {
-            playlist_id = m;            
+          playlist_id = m;
         });
+      } else {
+        error_message =
+          "You need to insert a vaild Spotify Playlist link or ID";
       }
-      else {
-        error_message = "You need to insert a vaild Spotify Playlist link or ID";
-      }
-    }
-    else if (playlist_input.length > 20 && playlist_input.length < 25) {
+    } else if (playlist_input.length > 20 && playlist_input.length < 25) {
       const regex = /^[a-zA-Z0-9]*$/gm;
       let m;
       if ((m = regex.exec(playlist_input)) !== null) {
         m.forEach((match, groupIndex) => {
-            playlist_id = m;            
+          playlist_id = m;
         });
+      } else {
+        error_message =
+          "You need to insert a vaild Spotify Playlist link or ID";
       }
-      else {
-        error_message = "You need to insert a vaild Spotify Playlist link or ID";
-      }
-    }
-    else{
+    } else {
       error_message = "You need to insert a vaild Spotify Playlist link or ID";
     }
 
     return playlist_id;
   }
 
-  // GET DISPLAYNAME FOR AUTH.. Remove later
-  /*
-  async function getProfile() {
-    if (!browser) return;
-
-    let accessToken = localStorage.getItem("access_token");
-
-    if (!accessToken) return;
-
-    const response = await fetch("https://api.spotify.com/v1/me", {
-      headers: {
-        Authorization: "Bearer " + accessToken,
-      },
-    });
-
-    const data = await response.json();
-    console.log(data);
-
-    displayName = data.display_name;
-  }
-  getProfile();
-  */
-
-
-
   // GET PLAYLIST FROM API
   async function getPlaylist(playlist_input) {
-
     if (!browser) return;
     if (!input_check(playlist_input)) return;
     let playlist_id = input_check(playlist_input);
-    
+
     error_message = "";
 
     let accessToken = localStorage.getItem("access_token");
 
-    if (!accessToken) return;
+    if (!accessToken) {
+      need_new_token = true;
+      return;
+    }
 
     // Get playlist ID from url
     let playlist_url = "";
-      playlist_url = `https://api.spotify.com/v1/playlists/${playlist_id}/tracks`;
+    playlist_url = `https://api.spotify.com/v1/playlists/${playlist_id}/tracks`;
 
-    const response = await fetch(
-      playlist_url,
-      {
-        headers: {
-          Authorization: "Bearer " + accessToken,
-        },
+    const response = await fetch(playlist_url, {
+      headers: {
+        Authorization: "Bearer " + accessToken,
+      },
+    });
+    const data = await response.json();
+    try {
+      if (data.error) {
+        if (data.error.status == 400) {
+          need_new_token = true;
+        } else {
+          error_message = "There seems to be something wrong the the url or id";
+        }
       }
-    );
-    const data = await response.json()
-      .then((data) => {
-        //Setting up game
-        questions = generate_questions(data.items);
-        game_state = 1; // 1 = Inprogress
-        console.log("questions:", questions);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-
+    } catch (error) {
+      console.error(error);
+      // Expected output: ReferenceError: nonExistentFunction is not defined
+      // (Note: the exact output may be browser-dependent)
+    }
+    console.log("data ", data);
+    //Setting up game
+    questions = generate_questions(data.items);
+    game_state = 1; // 1 = Inprogress
+    console.log("questions:", questions);
   }
 </script>
 
 <section id="main_content" class="flex">
   <img id="bg" src={bgImage} alt="consert background" />
-  {#if accessToken}
-    <div class="m-30 mx-auto w-full">
-      <p>Test url: https://open.spotify.com/playlist/37i9dQZF1EjgFGmwQdFGA3</p>
-      {#if game_state == 1}
-        <CoverGame {questions} bind:game_over={game_state}/>
-      {:else if game_state == 2}
-        <CoverGameOver score={score_counter} questions={questions.length} />
-      {:else}
-        <div class="p-1 0 m-auto mt-40 w-1/3 rounded-md h-96 relative">
-          <img id="tape" src={tapeImage} alt="music tape" />
-          <h2
-            class="text-4xl text-center text-dark-900 font-handwrite tracking-wider my-1 absolute inset-x-0 top-12"
+  <div class="m-30 mx-auto w-full">
+    <p>Test url: https://open.spotify.com/playlist/37i9dQZF1F0sijgNaJdgit</p>
+    {#if need_new_token}
+      <NotAuthed />
+    {:else if game_state == 1}
+      <CoverGame
+        {questions}
+        bind:game_over={game_state}
+        bind:score_counter={total_score}
+      />
+    {:else if game_state == 2}
+      <CoverGameOver score={total_score} questions={questions.length} />
+    {:else}
+      <div class="p-1 0 m-auto mt-40 w-1/3 rounded-md h-96 relative">
+        <img id="tape" src={tapeImage} alt="music tape" />
+        <h2
+          class="text-4xl text-center text-dark-900 font-handwrite tracking-wider my-1 absolute inset-x-0 top-12"
+        >
+          Load Your Playlist!
+        </h2>
+        <h4
+          class="text-center text-dark-700 text-xl font-thin my-3 absolute inset-x-0 top-20"
+        >
+          Spotify <span class="font-semibold">Playlist-URL</span> or
+          <span class="font-semibold">Playlist-ID</span>
+        </h4>
+        <div class="absolute inset-x-0 bottom-32 m-auto text-center">
+          <input
+            type="text"
+            placeholder="Insert Playlist here"
+            class="p-2 text-dark-900 rounded-md h-10 w-60 border border-light-400 focus:border-sec-500 focus:ring-sec-500"
+            bind:value={playlist_input}
+          />
+          <button
+            on:click={() => getPlaylist(playlist_input)}
+            class="w-28 h-9 bg-prim-500 rounded text-center text-ellipsis overflow-hidden hover:bg-prim-400"
+            >Start Game</button
           >
-            Load Your Playlist!
-          </h2>
-          <h4
-            class="text-center text-dark-700 text-xl font-thin my-3 absolute inset-x-0 top-20"
-          >
-            Spotify <span class="font-semibold">Playlist-URL</span> or
-            <span class="font-semibold">Playlist-ID</span>
-          </h4>
-          <div class="absolute inset-x-0 bottom-32 m-auto text-center">
-            <input
-              type="text"
-              placeholder="Insert Playlist here"
-              class="p-2 text-dark-900 rounded-md h-10 w-60 border border-light-400 focus:border-sec-500 focus:ring-sec-500"
-              bind:value={playlist_input}
-            />
-            <button
-              on:click={() => getPlaylist(playlist_input)}
-              class="w-28 h-9 bg-prim-500 rounded text-center text-ellipsis overflow-hidden hover:bg-prim-400"
-              >Start Game</button
-            >
-            <p class="text-[#c94242]">{error_message}</p>
-          </div>
         </div>
-      {/if}
-    </div>
-  {:else}
-    <NotAuthed />
-  {/if}
+        <p
+          class="text-[#c94242] text-xl font-bold absolute inset-x-0 bottom-24 m-auto text-center"
+        >
+          {error_message}
+        </p>
+      </div>
+    {/if}
+  </div>
 </section>
 
 <style>

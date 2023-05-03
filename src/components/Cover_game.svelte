@@ -1,10 +1,10 @@
 <script>
   export let questions;
   export let game_over = 1;
+  export let score_counter = 0;
 
   let active_guess = 99;
   let current_question = 0;
-  let score_counter = 0;
 
   function set_active_guess(album_id) {
     active_guess = album_id;
@@ -31,6 +31,7 @@
   >
 </h2>
 <img
+  id="hard-mode"
   class="m-auto p-5 w-1/5"
   src={questions[current_question].cover}
   alt="Guess this album cover"
@@ -62,3 +63,9 @@
       : 'invisible'}  hover:bg-dark-100">Submit</button
   >
 </div>
+
+<style>
+  #hard-mode {
+    clip: rect(0px, 60px, 200px, 0px);
+  }
+</style>
