@@ -1,6 +1,7 @@
 <script>
+  import Slider from '@bulatdashiev/svelte-slider';
   import { browser } from "$app/environment";
-  import { goto } from "$app/navigation";
+  
   import CoverGame from "../../components/Cover_game.svelte";
   import CoverGameOver from "../../components/Cover_game_over.svelte";
   import NotAuthed from "../../components/NotAuthed.svelte";
@@ -11,7 +12,7 @@
   let game_state = 0; // 0 = Not loaded, 1 = In progress, 2 = Game Finnished
   let need_new_token = false;
   let playlist_input = "";
-  let displayName = "";
+  let value = [0]; // hard level
   let questions = [];
   let total_score;
   let error_message = "";
@@ -219,7 +220,7 @@
           />
           <button
             on:click={() => getPlaylist(playlist_input)}
-            class="w-28 h-9 bg-prim-500 rounded text-center text-ellipsis overflow-hidden hover:bg-prim-400"
+            class="w-28 h-9 bg-prim-500 rounded text-center text-light-100 text-ellipsis overflow-hidden hover:bg-prim-400"
             >Start Game</button
           >
         </div>
@@ -242,6 +243,11 @@
         >
           TRY HARD MODE!
         </h2>
+        <p>Hard Mode Level: <span class="text-sec-500 text-xl font-bold">
+          {value == 0 ? "OFF" : value[0]}
+        </span></p>
+        
+        <Slider min="0" max="5" bind:value />
         <p class="text-center m-4">
           You will only see a part of the album-cover
         </p>
