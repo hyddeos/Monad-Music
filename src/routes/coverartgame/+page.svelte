@@ -175,7 +175,6 @@
       // Expected output: ReferenceError: nonExistentFunction is not defined
       // (Note: the exact output may be browser-dependent)
     }
-    console.log("data ", data);
     //Setting up game
     questions = generate_questions(data.items);
     game_state = 1; // 1 = Inprogress
@@ -232,7 +231,7 @@
         </p>
       </div>
       <div
-        class="max-w-lg m-auto bg-dark-900 p-6 flex flex-col items-center rounded border-2 border-dark-700"
+        class="max-w-lg m-auto bg-dark-900 p-8 flex flex-col items-center rounded border-2 border-dark-700"
       >
         <h2
           class="text-xl text-center text-light-200 font-handwrite tracking-wider my-1"
@@ -246,7 +245,7 @@
         </h2>
         <p class="mt-2">
           Hard Mode Level: <span class="text-sec-500 text-xl font-bold">
-            {value == 0 ? "OFF" : value[0]}
+            {value[0] == 0 ? "OFF" : value[0]}
           </span>
         </p>
 

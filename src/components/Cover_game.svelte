@@ -5,6 +5,8 @@
   export let score_counter = 0;
   console.log("hard lvl is:", hard_level[0]);
 
+  hard_level++; // To avoid 0 value
+
   let active_guess = 99;
   let current_question = 0;
 
@@ -23,11 +25,8 @@
     }
   }
 
-  function set_active_guess(album_id) {
+  function submit_guess(album_id, right_answer) {
     active_guess = album_id;
-  }
-
-  function submit_guess(right_answer) {
     // Check if game is over
     if (current_question + 1 == questions.length) {
       game_over = 2;
@@ -37,8 +36,17 @@
     // Add points
     if (active_guess == right_answer) {
       score_counter++;
+    } else {
+      ("");
     }
     active_guess = 99; // Reset guess to non-guess value
+  }
+  function wait(ms) {
+    var start = new Date().getTime();
+    var end = start;
+    while (end < start + ms) {
+      end = new Date().getTime();
+    }
   }
 </script>
 
@@ -61,7 +69,8 @@
   {#each questions[current_question].albums[0] as album}
     <div class="p-2">
       <button
-        on:click={() => set_active_guess(album[0].album_id)}
+        on:click={() =>
+          submit_guess(album[0].album_id, questions[current_question].answer)}
         class="w-80 h-40 rounded {active_guess === album[0].album_id
           ? 'bg-dark-200 text-dark-700'
           : 'bg-dark-700'} text-center text-ellipsis overflow-hidden hover:bg-dark-100 hover:text-dark-700"
@@ -76,14 +85,7 @@
     </div>
   {/each}
 </div>
-<div class="m-auto text-center">
-  <button
-    on:click={() => submit_guess(questions[current_question].answer)}
-    class="w-40 h-20 rounded {active_guess !== 99
-      ? 'bg-prim-500 text-dark-700'
-      : 'invisible'}  hover:bg-dark-100">Submit</button
-  >
-</div>
+<div class="m-auto text-center" />
 
 <style>
   #image_holder {
