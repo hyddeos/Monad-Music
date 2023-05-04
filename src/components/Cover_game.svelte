@@ -1,10 +1,27 @@
 <script>
   export let questions;
+  export let hard_level;
   export let game_over = 1;
   export let score_counter = 0;
+  console.log("hard lvl is:", hard_level[0]);
 
   let active_guess = 99;
   let current_question = 0;
+
+  function cssVariables(node, variables) {
+    setCssVariables(node, variables);
+
+    return {
+      update(variables) {
+        setCssVariables(node, variables);
+      },
+    };
+  }
+  function setCssVariables(node, variables) {
+    for (const name in variables) {
+      node.style.setProperty(`--${name}`, variables[name]);
+    }
+  }
 
   function set_active_guess(album_id) {
     active_guess = album_id;
@@ -32,7 +49,8 @@
 </h2>
 <div class="m-auto" id="image_holder">
   <img
-    id="hard-mode"
+    use:cssVariables={{ hard_level }}
+    id="hard_level"
     class=""
     src={questions[current_question].cover}
     alt="Guess this album cover"
@@ -73,28 +91,10 @@
     height: 640px;
     overflow: hidden;
   }
-  #std-mode {
-    -moz-transform: scale(1);
-    -o-transform: scale(1);
-    -ms-transform: scale(1);
-    transform: scale(1);
-  }
-  #easy-mode {
-    -moz-transform: scale(1.3);
-    -o-transform: scale(1.3);
-    -ms-transform: scale(1.3);
-    transform: scale(1.3);
-  }
-  #medium-mode {
-    -moz-transform: scale(2);
-    -o-transform: scale(2);
-    -ms-transform: scale(2);
-    transform: scale(2);
-  }
-  #hard-mode {
-    -moz-transform: scale(3);
-    -o-transform: scale(3);
-    -ms-transform: scale(3);
-    transform: scale(3);
+  #hard_level {
+    -moz-transform: scale(var(--hard_level));
+    -o-transform: scale(var(--hard_level));
+    -ms-transform: scale(var(--hard_level));
+    transform: scale(var(--hard_level));
   }
 </style>

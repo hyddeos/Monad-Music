@@ -1,7 +1,7 @@
 <script>
-  import Slider from '@bulatdashiev/svelte-slider';
+  import Slider from "@bulatdashiev/svelte-slider";
   import { browser } from "$app/environment";
-  
+
   import CoverGame from "../../components/Cover_game.svelte";
   import CoverGameOver from "../../components/Cover_game_over.svelte";
   import NotAuthed from "../../components/NotAuthed.svelte";
@@ -192,6 +192,7 @@
     {:else if game_state == 1}
       <CoverGame
         {questions}
+        hard_level={value}
         bind:game_over={game_state}
         bind:score_counter={total_score}
       />
@@ -243,13 +244,31 @@
         >
           TRY HARD MODE!
         </h2>
-        <p>Hard Mode Level: <span class="text-sec-500 text-xl font-bold">
-          {value == 0 ? "OFF" : value[0]}
-        </span></p>
-        
-        <Slider min="0" max="5" bind:value />
-        <p class="text-center m-4">
-          You will only see a part of the album-cover
+        <p class="mt-2">
+          Hard Mode Level: <span class="text-sec-500 text-xl font-bold">
+            {value == 0 ? "OFF" : value[0]}
+          </span>
+        </p>
+
+        <Slider min="0" max="5" bind:value>
+          <span style="font-size: 40px;">
+            {#if value == 0}
+              &#128526;
+            {:else if value == 1}
+              &#128527;
+            {:else if value == 2}
+              &#128539;
+            {:else if value == 3}
+              &#128558;
+            {:else if value == 4}
+              &#128561;
+            {:else if value == 5}
+              &#128565;
+            {/if}
+          </span>
+        </Slider>
+        <p class="text-center m-2">
+          At higher levels you will see less of the album.
         </p>
       </div>
     {/if}
