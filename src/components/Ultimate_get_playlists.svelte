@@ -3,24 +3,74 @@
 
   let accessToken = localStorage.getItem("access_token");
 
-  let playlists = [];
+  let playlists_info = [];
+  let all_songs = [];
+  let count_songs = {};
 
   async function generate_list() {
-    const all_playlists = await getPlaylists();
-    getWrappedLists(all_playlists);
-    console.log("all", playlists);
+    const all_playlists = await get_playlists();
+    get_wrapped_lists(all_playlists);
+    await analyze_lists(playlists_info);
+    counter(all_songs);
   }
 
-  function getWrappedLists(all_playlists) {
-    console.log("lists in", all_playlists);
+  function get_wrapped_lists(all_playlists) {
     all_playlists.forEach((playlist) => {
-      if (playlist.name.includes("Your Top Songs")) {
-        playlists.push(playlist);
+      if (
+        playlist.name.includes("Your Top Songs") ||
+        playlist.name.includes("Dina topplåtar")
+      ) {
+        playlists_info.push(playlist);
       }
     });
   }
 
-  async function getPlaylists() {
+  async function analyze_lists(playlists) {
+    playlists.forEach(async (playlist) => {
+      await analyze_playlist(playlist.id);
+    });
+  }
+
+  function counter(all_songs) {
+    // if (song.title_id in count_songs) {
+    all_songs.forEach((song) => {
+      if (count_songs.hasOwnProperty(song.title_id)) {
+        count_songs[song.title_id]++;
+      } else {
+        count_songs[song.title_id] = 1;
+      }
+    });
+    console.log("amount of songs: ", all_songs.length);
+
+    console.log("count_songs", count_songs);
+  }
+
+  async function analyze_playlist(playlist_id) {
+    const response = await fetch(
+      `https://api.spotify.com/v1/playlists/${playlist_id}/tracks`,
+      {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+        },
+      }
+    );
+    const data = await response.json();
+    await Promise.all(
+      data.items.map(async (song, index) => {
+        all_songs.push({
+          artist: song.track.artists[0].name,
+          artist_id: song.track.artists[0].id,
+          album: song.track.album.name,
+          album_id: song.track.album.id,
+          title: song.track.name,
+          title_id: song.track.id,
+          place_on_list: index + 1,
+        });
+      })
+    );
+  }
+
+  async function get_playlists() {
     if (!browser) return;
     if (!accessToken) return;
 
@@ -33,7 +83,6 @@
       }
     );
     const data = await response.json();
-    console.log("data", data);
     return data.items;
   }
 </script>
