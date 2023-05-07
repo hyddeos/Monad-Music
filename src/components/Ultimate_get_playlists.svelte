@@ -7,7 +7,92 @@
     const all_playlists = await get_playlists();
     const wrapped_lists_info = get_wrapped_lists_info(all_playlists); // Prev playlists_info
     const all_songs = await get_songs_from_lists(wrapped_lists_info);
+    const counted_data = analyze_songs(all_songs);
+    const reoccuring_songs = get_reoccuring_songs(counted_data.songs);
+    // -- add more filters here --
+    await create_playlist(reoccuring_songs);
+  }
+
+  async function create_playlist(songs) {
+    if (!browser) return;
+    if (!accessToken) return;
+
+    const playlistResponse = await fetch(
+      `https://api.spotify.com/v1/me/playlists`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({
+          name: "My Ultimate List -- By ESH",
+          description:
+            "This list is based on songs that you have played a lot over the years aswell as your most played songs from each year",
+          public: false,
+        }),
+      }
+    );
+    const playlistData = await playlistResponse.json();
+    const playlistId = playlistData.id;
+
+    // Add tracks to the playlist;
+    const trackUris = songs.map((id) => `spotify:track:${id}`);
+    const addTracksResponse = await fetch(
+      `https://api.spotify.com/v1/playlists/${playlistId}/tracks`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({
+          uris: trackUris,
+        }),
+      }
+    );
+    const addedTracksData = await addTracksResponse.json();
+
+    console.log("Playlist created:", playlistData);
+    console.log("Tracks added:", addedTracksData);
+  }
+
+  function get_reoccuring_songs(all_songs) {
     console.log("all", all_songs);
+    let songs = [];
+    all_songs.forEach((song) => {
+      if (song.count > 1) {
+        songs.push(song.id);
+      }
+    });
+    return songs;
+  }
+
+  function analyze_songs(all_songs) {
+    const data = {
+      artists: {},
+      songs: {},
+      albums: {},
+    };
+    all_songs.forEach((song) => {
+      const { title_id: songId, album_id: albumId, artist_id: artistId } = song;
+      data.songs[songId] = (data.songs[songId] || 0) + 1;
+      data.albums[albumId] = (data.albums[albumId] || 0) + 1;
+      data.artists[artistId] = (data.artists[artistId] || 0) + 1;
+    });
+    const sortDescending = (a, b) => b.count - a.count;
+    const sortedData = {
+      songs: Object.entries(data.songs)
+        .map(([id, count]) => ({ id, count }))
+        .sort(sortDescending),
+      albums: Object.entries(data.albums)
+        .map(([id, count]) => ({ id, count }))
+        .sort(sortDescending),
+      artists: Object.entries(data.artists)
+        .map(([id, count]) => ({ id, count }))
+        .sort(sortDescending),
+    };
+    return sortedData;
   }
 
   function get_wrapped_lists_info(all_playlists) {
