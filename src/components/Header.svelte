@@ -1,7 +1,6 @@
 <script>
   export let accessToken;
-  console.log("token head:", accessToken)
-  
+ 
   //MENU 
   let logo_w = "/logo_w.svg";
   let logo_o = "/logo_o.svg";
@@ -16,7 +15,7 @@
 
 <div class="container mx-auto w-full z-30">
   <div>
-    <nav
+    <nav data-sveltekit-reload
       class="container w-full px-6 py-4 mx-auto md:flex md:justify-between md:items-center"
     >
       <div class="flex items-center justify-center">

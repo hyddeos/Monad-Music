@@ -163,8 +163,9 @@
     });
     const data = await response.json();
     try {
+      console.log("--error", data);
       if (data.error) {
-        if (data.error.status == 400) {
+        if (data.error.status == 401) {
           need_new_token = true;
         } else {
           error_message = "There seems to be something wrong the the url or id";

@@ -1,7 +1,6 @@
 <script>
   import { browser } from "$app/environment";
-  import { goto } from "$app/navigation";
-  import { claim_svg_element } from "svelte/internal";
+
   let code;
   let codeVerifier;
   const redirectUri = "http://localhost:5173/auth/code/";
@@ -42,4 +41,7 @@
   }
 </script>
 
-<h1>{code}</h1>
+<div class="m-auto pt-[15%] z-10 max-w-xl">
+  <h1 class="text-4xl text-center text-light-200 font-bold tracking-wider my-1>Hold on...">LOADING COMPLETE</h1>
+  <h2 class="text-2xl text-center text-light-200 font-bold tracking-wider my-1>Hold on...">You will soon be redirected</h2>
+</div>

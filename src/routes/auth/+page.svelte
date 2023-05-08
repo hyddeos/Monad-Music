@@ -63,5 +63,7 @@
   });
 </script>
 
-<p>client_id {client_id}</p>
-<p>Random string:</p>
+<div class="m-auto pt-[15%] z-10 max-w-xl">
+  <h1 class="text-4xl text-center text-light-200 font-bold tracking-wider my-1>Hold on...">LOADING...</h1>
+  <h2 class="text-2xl text-center text-light-200 font-bold tracking-wider my-1>Hold on...">Connecting and searching for intressting data</h2>
+</div>
