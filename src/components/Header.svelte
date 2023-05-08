@@ -1,7 +1,7 @@
 <script>
   export let accessToken;
-  
-  //MENU 
+
+  //MENU
   let logo_w = "/logo_w.svg";
   let logo_o = "/logo_o.svg";
   let logo_hover = false;
@@ -15,7 +15,8 @@
 
 <div class="container mx-auto w-full z-30">
   <div>
-    <nav data-sveltekit-reload
+    <nav
+      data-sveltekit-reload
       class="container w-full px-6 py-4 mx-auto md:flex md:justify-between md:items-center"
     >
       <div class="flex items-center justify-center">
@@ -30,7 +31,10 @@
           />MUSIC
         </a>
         <!-- Mobile menu button -->
-        <div on:click={toggleNavbar} class="absolute top-5 left-12 flex md:hidden">
+        <div
+          on:click={toggleNavbar}
+          class="absolute top-5 left-12 flex md:hidden"
+        >
           <button
             type="button"
             class="text-gray-800 hover:text-gray-400 focus:outline-none focus:text-gray-400"
@@ -55,7 +59,7 @@
 
       <!-- Mobile Menu open: "block", Menu closed: "hidden" -->
       <div
-        class="flex-col mt-8 space-y-4 text-left  md:flex md:space-y-0 md:flex-row md:items-center md:space-x-10 md:mt-0 {showMenu
+        class="flex-col mt-8 space-y-4 text-left md:flex md:space-y-0 md:flex-row md:items-center md:space-x-10 md:mt-0 {showMenu
           ? 'flex bg-dark-900 p-4 py-6 border border-dark-700 absolute w-3/4'
           : 'hidden'}"
       >
@@ -74,15 +78,19 @@
       </div>
       <div>
         {#if accessToken}
-        <p>You are <span class="font-heading text-[#42c968]">AUTHED</span></p>          <a class="font-heading text-sec-500 hover:text-prim-400" href="/auth"
-        >NOT AUTHED</a>
-        {:else}
-        <p>        You are
+          <p>You are <span class="font-heading text-[#42c968]">AUTHED</span></p>
           <a class="font-heading text-sec-500 hover:text-prim-400" href="/auth"
-          >NOT AUTHED</a
-        ></p>
+            >NOT AUTHED</a
+          >
+        {:else}
+          <p>
+            You are
+            <a
+              class="font-heading text-sec-500 hover:text-prim-400"
+              href="/auth">NOT AUTHED</a
+            >
+          </p>
         {/if}
-
       </div>
     </nav>
   </div>

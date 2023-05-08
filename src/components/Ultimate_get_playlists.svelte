@@ -1,11 +1,14 @@
 <script>
   import { browser } from "$app/environment";
 
-  let accessToken = localStorage.getItem("access_token");
+  let accessToken = "";
+  if (browser) {
+    accessToken = localStorage.getItem("access_token");
+  }
 
   async function generate_list() {
     const all_playlists = await get_playlists();
-    const wrapped_lists_info = get_wrapped_lists_info(all_playlists); // Prev playlists_info
+    const wrapped_lists_info = get_wrapped_lists_info(all_playlists);
     const all_songs = await get_songs_from_lists(wrapped_lists_info);
     const counted_data = analyze_songs(all_songs);
     const reoccuring_songs = get_reoccuring_songs(counted_data.songs);
@@ -15,6 +18,7 @@
 
   async function create_playlist(songs) {
     if (!browser) return;
+
     if (!accessToken) return;
 
     const playlistResponse = await fetch(
