@@ -1,6 +1,6 @@
 <script>
   export let accessToken;
- 
+  
   //MENU 
   let logo_w = "/logo_w.svg";
   let logo_o = "/logo_o.svg";

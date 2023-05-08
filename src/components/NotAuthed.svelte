@@ -1,5 +1,6 @@
 <script>
-    let access_token = localStorage.getItem("access_token");
+
+  let access_token = localStorage.getItem("access_token");
 
 </script>
 
@@ -22,6 +23,7 @@
       ></a
     >
     <p class="text-center m-4">
+      You might have to do this again if the access token times out.
       After one hour we will need to redo this step if your still here, see you then.
     </p>
   </div>

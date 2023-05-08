@@ -40,7 +40,7 @@
   let codeVerifier = generateRandomString(128);
   generateCodeChallenge(codeVerifier).then(async (codeChallenge) => {
     let state = generateRandomString(16);
-    let scope = "user-read-private user-read-email";
+    let scope = "user-read-private playlist-read-private playlist-modify-private";
     let args = new URLSearchParams({
       response_type: "code",
       client_id: client_id,
@@ -67,3 +67,4 @@
   <h1 class="text-4xl text-center text-light-200 font-bold tracking-wider my-1>Hold on...">LOADING...</h1>
   <h2 class="text-2xl text-center text-light-200 font-bold tracking-wider my-1>Hold on...">Connecting and searching for intressting data</h2>
 </div>
+
