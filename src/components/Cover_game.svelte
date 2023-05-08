@@ -1,16 +1,32 @@
 <script>
   export let questions;
+  export let hard_level;
   export let game_over = 1;
+  export let score_counter = 0;
+  console.log("hard lvl is:", hard_level[0]);
+
+  hard_level++; // To avoid 0 value
 
   let active_guess = 99;
   let current_question = 0;
-  let score_counter = 0;
 
-  function set_active_guess(album_id) {
-    active_guess = album_id;
+  function cssVariables(node, variables) {
+    setCssVariables(node, variables);
+
+    return {
+      update(variables) {
+        setCssVariables(node, variables);
+      },
+    };
+  }
+  function setCssVariables(node, variables) {
+    for (const name in variables) {
+      node.style.setProperty(`--${name}`, variables[name]);
+    }
   }
 
-  function submit_guess(right_answer) {
+  function submit_guess(album_id, right_answer) {
+    active_guess = album_id;
     // Check if game is over
     if (current_question + 1 == questions.length) {
       game_over = 2;
@@ -20,8 +36,17 @@
     // Add points
     if (active_guess == right_answer) {
       score_counter++;
+    } else {
+      ("");
     }
     active_guess = 99; // Reset guess to non-guess value
+  }
+  function wait(ms) {
+    var start = new Date().getTime();
+    var end = start;
+    while (end < start + ms) {
+      end = new Date().getTime();
+    }
   }
 </script>
 
@@ -30,16 +55,22 @@
     >({current_question + 1}/{questions.length})</span
   >
 </h2>
-<img
-  class="m-auto p-5 w-1/5"
-  src={questions[current_question].cover}
-  alt="Guess this album cover"
-/>
+<div class="m-auto" id="image_holder">
+  <img
+    use:cssVariables={{ hard_level }}
+    id="hard_level"
+    class=""
+    src={questions[current_question].cover}
+    alt="Guess this album cover"
+  />
+</div>
+
 <div class="w-full flex flex-wrap justify-center px-2">
   {#each questions[current_question].albums[0] as album}
     <div class="p-2">
       <button
-        on:click={() => set_active_guess(album[0].album_id)}
+        on:click={() =>
+          submit_guess(album[0].album_id, questions[current_question].answer)}
         class="w-80 h-40 rounded {active_guess === album[0].album_id
           ? 'bg-dark-200 text-dark-700'
           : 'bg-dark-700'} text-center text-ellipsis overflow-hidden hover:bg-dark-100 hover:text-dark-700"
@@ -54,11 +85,18 @@
     </div>
   {/each}
 </div>
-<div class="m-auto text-center">
-  <button
-    on:click={() => submit_guess(questions[current_question].answer)}
-    class="w-40 h-20 rounded {active_guess !== 99
-      ? 'bg-prim-500 text-dark-700'
-      : 'invisible'}  hover:bg-dark-100">Submit</button
-  >
-</div>
+<div class="m-auto text-center" />
+
+<style>
+  #image_holder {
+    width: 640px;
+    height: 640px;
+    overflow: hidden;
+  }
+  #hard_level {
+    -moz-transform: scale(var(--hard_level));
+    -o-transform: scale(var(--hard_level));
+    -ms-transform: scale(var(--hard_level));
+    transform: scale(var(--hard_level));
+  }
+</style>

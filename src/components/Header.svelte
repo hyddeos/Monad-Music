@@ -1,5 +1,6 @@
 <script>
-  import { browser } from "$app/environment";
+  export let accessToken;
+ 
   //MENU 
   let logo_w = "/logo_w.svg";
   let logo_o = "/logo_o.svg";
@@ -10,21 +11,11 @@
   function toggleNavbar() {
     showMenu = !showMenu;
   }
-  // AUTH
-  let authed = false;
-  function run_auth_check() {
-    if (!browser) return;
-    let accessToken = localStorage.getItem("access_token");
-    if (!accessToken) return;
-    authed = true;
-  }
-  run_auth_check();
-
 </script>
 
 <div class="container mx-auto w-full z-30">
   <div>
-    <nav
+    <nav data-sveltekit-reload
       class="container w-full px-6 py-4 mx-auto md:flex md:justify-between md:items-center"
     >
       <div class="flex items-center justify-center">
@@ -82,8 +73,9 @@
         >
       </div>
       <div>
-        {#if authed}
-        <p>You are <span class="font-heading text-[#42c968]">AUTHED</span></p>
+        {#if accessToken}
+        <p>You are <span class="font-heading text-[#42c968]">AUTHED</span></p>          <a class="font-heading text-sec-500 hover:text-prim-400" href="/auth"
+        >NOT AUTHED</a>
         {:else}
         <p>        You are
           <a class="font-heading text-sec-500 hover:text-prim-400" href="/auth"
