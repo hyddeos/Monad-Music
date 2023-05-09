@@ -28,11 +28,7 @@
     active_guess = album_id;
     let guess_btn = document.getElementById(`btn${active_guess}`);
     let right_btn = document.getElementById(`btn${right_answer}`);
-    // Check if game is over
-    if (current_question + 1 == questions.length) {
-      game_over = 2;
-      return;
-    }
+
     // Add points
     if (active_guess == right_answer) {
       score_counter++;
@@ -42,11 +38,15 @@
       right_btn.style.backgroundColor = "#42c968"; // What was the right Anwser
     }
     setTimeout(() => {
-      wait(2000);
+      wait(1500);
       guess_btn.style.backgroundColor = "";
       right_btn.style.backgroundColor = "";
       current_question++;
     }, 0);
+    // Check if game is over
+    if (current_question + 1 == questions.length) {
+      game_over = 2;
+    }
   }
 
   function wait(ms) {
