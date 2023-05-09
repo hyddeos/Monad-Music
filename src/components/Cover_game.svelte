@@ -3,7 +3,6 @@
   export let hard_level;
   export let game_over = 1;
   export let score_counter = 0;
-  console.log("hard lvl is:", hard_level[0]);
 
   hard_level++; // To avoid 0 value
 
@@ -27,20 +26,29 @@
 
   function submit_guess(album_id, right_answer) {
     active_guess = album_id;
+    let guess_btn = document.getElementById(`btn${active_guess}`);
+    let right_btn = document.getElementById(`btn${right_answer}`);
     // Check if game is over
     if (current_question + 1 == questions.length) {
       game_over = 2;
-    } else {
-      current_question++;
+      return;
     }
     // Add points
     if (active_guess == right_answer) {
       score_counter++;
+      guess_btn.style.backgroundColor = "#42c968"; // Right Anwser
     } else {
-      ("");
+      guess_btn.style.backgroundColor = "#c94242"; // The Wrong guess
+      right_btn.style.backgroundColor = "#42c968"; // What was the right Anwser
     }
-    active_guess = 99; // Reset guess to non-guess value
+    setTimeout(() => {
+      wait(2000);
+      guess_btn.style.backgroundColor = "";
+      right_btn.style.backgroundColor = "";
+      current_question++;
+    }, 0);
   }
+
   function wait(ms) {
     var start = new Date().getTime();
     var end = start;
@@ -69,11 +77,10 @@
   {#each questions[current_question].albums[0] as album}
     <div class="p-2">
       <button
+        id="btn{album[0].album_id}"
         on:click={() =>
           submit_guess(album[0].album_id, questions[current_question].answer)}
-        class="w-80 h-40 rounded {active_guess === album[0].album_id
-          ? 'bg-dark-200 text-dark-700'
-          : 'bg-dark-700'} text-center text-ellipsis overflow-hidden hover:bg-dark-100 hover:text-dark-700"
+        class="w-80 h-40 rounded bg-sec-800 text-center text-ellipsis overflow-hidden hover:bg-dark-100 hover:text-dark-700"
       >
         <h3 class="font-bold text-xl p-1">
           {album[0].album}

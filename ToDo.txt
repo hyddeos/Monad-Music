@@ -2,9 +2,9 @@ Auth
     Fixa bättre och smidigare auth
     vidare befodra till rätt ställe
 Cover Album Game
-    Fixa knappar som visar om det är rätt eller flex
-    fixa bättre input av url
+    DONE Fixa knappar som visar om det är rätt eller flex
+    make play again btn efter matchen.
+    fixa bättre input av url.
 Ultimate list
     Se till så man inte kan skapa dubbletter
-    Gör möjlighet till make public
     Lägg till top 5 från varje år om dom redan inte är med
