@@ -2,9 +2,13 @@
   import { browser } from "$app/environment";
   import { goto } from "$app/navigation";
   const client_id = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
-  const client_secret = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET;
-  const client_refresh_token = import.meta.env.VITE_SPOTIFY_REFRESH_TOKEN;
-  const redirectUri = "http://localhost:5173/auth/code/";
+
+  const urlParams = new URLSearchParams(window.location.search);
+  let page = urlParams.get("page");
+
+  const redirectUri = `http://localhost:5173/${page}`;
+  console.log("redirectr:", redirectUri);
+
   function generateRandomString(length) {
     let text = "";
     let possible =
@@ -40,7 +44,8 @@
   let codeVerifier = generateRandomString(128);
   generateCodeChallenge(codeVerifier).then(async (codeChallenge) => {
     let state = generateRandomString(16);
-    let scope = "user-read-private playlist-read-private playlist-modify-private";
+    let scope =
+      "user-read-private playlist-read-private playlist-modify-private";
     let args = new URLSearchParams({
       response_type: "code",
       client_id: client_id,
@@ -50,21 +55,23 @@
       code_challenge_method: "S256",
       code_challenge: codeChallenge,
     });
-    /*
-    // set cookie with code_verifier
-    setCookie("code_verifier", codeVerifier, { path: "/auth" });
-    */
     console.log("ARGS:", args);
     if (browser) {
       localStorage.setItem("code_verifier", codeVerifier);
       goto("https://accounts.spotify.com/authorize?" + args);
     }
-    // window.location = "https://accounts.spotify.com/authorize?" + args;
   });
 </script>
 
 <div class="m-auto pt-[15%] z-10 max-w-xl">
-  <h1 class="text-4xl text-center text-light-200 font-bold tracking-wider my-1>Hold on...">LOADING...</h1>
-  <h2 class="text-2xl text-center text-light-200 font-bold tracking-wider my-1>Hold on...">Connecting and searching for intressting data</h2>
+  <h1
+    class="text-4xl text-center text-light-200 font-bold tracking-wider my-1>Hold on..."
+  >
+    LOADING...
+  </h1>
+  <h2
+    class="text-2xl text-center text-light-200 font-bold tracking-wider my-1>Hold on..."
+  >
+    Connecting and searching for intressting data
+  </h2>
 </div>
-
