@@ -108,16 +108,13 @@
     if (playlist_input.length == 0) {
       error_message =
         "Can´t be empty, Type a vaild Spotify Playlist link or ID";
-    } else if (playlist_input.includes("spotify")) {
-      const regex = /\w+$/;
-      let m;
-      if ((m = regex.exec(playlist_input)) !== null) {
-        m.forEach((match, groupIndex) => {
-          playlist_id = m;
-        });
+    } else if (playlist_input.includes("spotify.com")) {
+      const regex = /playlist\/([\w-]+)/;
+      const match = playlist_input.match(regex);
+      if (match) {
+        playlist_id = match[1];
       } else {
-        error_message =
-          "You need to insert a vaild Spotify Playlist link or ID";
+        error_message = "There is something wrong with that URL";
       }
     } else if (playlist_input.length > 20 && playlist_input.length < 25) {
       const regex = /^[a-zA-Z0-9]*$/gm;
