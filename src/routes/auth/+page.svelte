@@ -4,7 +4,7 @@
   const client_id = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
   const client_secret = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET;
   const client_refresh_token = import.meta.env.VITE_SPOTIFY_REFRESH_TOKEN;
-  const redirectUri = "http://localhost:5173/auth/code/";
+  const redirectUri = import.meta.env.REDICT_URL;
   function generateRandomString(length) {
     let text = "";
     let possible =

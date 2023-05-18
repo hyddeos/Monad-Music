@@ -3,7 +3,7 @@
 
   let code;
   let codeVerifier;
-  const redirectUri = "http://localhost:5173/auth/code/";
+  const redirectUri = import.meta.env.REDICT_URL;
   const client_id = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
   if (browser) {
     const urlParams = new URLSearchParams(window.location.search);
