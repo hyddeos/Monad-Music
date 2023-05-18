@@ -2,6 +2,7 @@
   import { browser } from "$app/environment";
   let error_message = "";
   let list_created_succesfully = false;
+  let loading_list = false;
 
   let accessToken = "";
   if (browser) {
@@ -9,6 +10,8 @@
   }
 
   async function generate_list() {
+    loading_list = true;
+    error_message = "";
     const all_playlists = await get_playlists();
     const wrapped_lists_info = get_wrapped_lists_info(all_playlists);
     if (wrapped_lists_info) {
@@ -18,6 +21,7 @@
       // -- add more filters here --
       await create_playlist(reoccuring_songs);
     } else {
+      loading_list = false;
       console.error("Playlist already created or didt find new wrapped lists");
       error_message =
         "Playlist already created or we did not find any playlists to gather data from";
@@ -26,14 +30,7 @@
 
   async function create_playlist(songs) {
     if (!browser) return;
-
     if (!accessToken) return;
-
-    /* ADDNING LIST REMOVE
-     * remove return
-     *
-     * */
-    return;
 
     const playlistResponse = await fetch(
       `https://api.spotify.com/v1/me/playlists`,
@@ -70,6 +67,8 @@
       }
     );
     const addedTracksData = await addTracksResponse.json();
+    list_created_succesfully = true;
+    loading_list = false;
 
     console.log("Playlist created:", playlistData);
     console.log("Tracks added:", addedTracksData);
@@ -115,9 +114,10 @@
 
   function get_wrapped_lists_info(all_playlists) {
     let playlists_info = [];
+    let ultimate_list_duplet = false;
     all_playlists.forEach((playlist) => {
-      if (playlist.name.includes("By ESH")) {
-        return (playlists_info = []);
+      if (playlist.name.includes("My Ultimate List -- By ESH")) {
+        ultimate_list_duplet = true;
       } else if (
         playlist.name.includes("Your Top Songs") ||
         playlist.name.includes("Dina topplåtar")
@@ -125,7 +125,12 @@
         playlists_info.push(playlist);
       }
     });
-    return playlists_info;
+    if (ultimate_list_duplet) {
+      playlists_info = [];
+      return;
+    } else {
+      return playlists_info;
+    }
   }
 
   async function get_songs_from_lists(playlists) {
@@ -189,25 +194,33 @@
     </h5>
   </div>
   <div class="flex justify-center items-center m-auto">
-    <button
-      on:click={() => generate_list()}
-      class="w-48 h-20 m-2 bg-prim-500 rounded text-center text-ellipsis overflow-hidden hover:bg-prim-400"
-      ><strong>GENERATE LIST</strong></button
-    >
-    {#if error_message}
-      <p
-        class="text-[#c94242] text-xl font-bold absolute inset-x-0 bottom-24 m-auto text-center"
+    {#if loading_list}
+      <button
+        class="w-48 h-20 m-2 bg-dark-500 rounded text-center text-ellipsis overflow-hidden hover:bg-dark-500"
+        ><strong>Loading...</strong></button
       >
-        {error_message}
-      </p>
-    {:else if list_created_succesfully}
-      <p
-        class="text-[#c94242] text-xl font-bold absolute inset-x-0 bottom-24 m-auto text-center"
+    {:else}
+      <button
+        on:click={() => generate_list()}
+        class="w-48 h-20 m-2 bg-prim-500 rounded text-center text-ellipsis overflow-hidden hover:bg-prim-400"
+        ><strong>GENERATE LIST</strong></button
       >
-        List created succesfully. Check out your new playlist on Spotify called
-        "My Ultimate Playlist -- By ESH"
-      </p>
     {/if}
-    <p />
   </div>
+  {#if error_message}
+    <p class="text-[#c94242] text-xl m-auto text-center">
+      {error_message}
+    </p>
+  {:else if list_created_succesfully}
+    <p class="text-[#42c968] text-xl font-bold m-auto text-center">
+      List created succesfully
+    </p>
+    <p class="text-l m-auto text-center">
+      Check out your new playlist on Spotify called:
+    </p>
+    <p class="text-xl font-bold m-auto text-center">
+      <strong>My Ultimate Playlist -- By ESH</strong>
+    </p>
+  {/if}
+  <p />
 </div>
