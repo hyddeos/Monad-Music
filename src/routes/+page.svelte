@@ -1,6 +1,8 @@
 <script>
   import { onMount } from "svelte";
   import { fade } from "svelte/transition";
+  const redirectUri = import.meta.env.VITE_REDIRECT_URL;
+  const client_id = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
 
   let bgImage = "/bg.jpg";
   let logo_w = "/logo_w.svg";
@@ -87,12 +89,12 @@
       <img src={logo_o} class="h-40 m-auto" alt="Monad Music Logo" />
     </div>
     <div class="basis-2/3 h-40">
-      <h1 class="text-8xl font-heading text-center">
-        MONAD MUSIC
-      </h1>
-        <h3 class="text-4xl text-center md:text-center font-handwrite tracking-wider">
-          - Play With Playlists
-        </h3>
+      <h1 class="text-8xl font-heading text-center">MONAD MUSIC</h1>
+      <h3
+        class="text-4xl text-center md:text-center font-handwrite tracking-wider"
+      >
+        - Play With Playlists
+      </h3>
     </div>
   </section>
 </section>
