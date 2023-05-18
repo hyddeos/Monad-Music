@@ -48,7 +48,7 @@
         body: JSON.stringify({
           name: "My Ultimate List -- By ESH",
           description:
-            "This list is based on songs that you have played a lot over the years aswell as your most played songs from each year",
+            "This list is based on songs that you have played a lot over the years aswell as your most played songs from each year. Generated with Monad Music by ESH",
           public: false,
         }),
       }
