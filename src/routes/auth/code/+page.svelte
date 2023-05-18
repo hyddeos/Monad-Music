@@ -42,7 +42,14 @@
 </script>
 
 <div class="m-auto pt-[15%] z-10 max-w-xl">
-  <h1 class="text-4xl text-center text-light-200 font-bold tracking-wider my-1>Hold on...">LOADING COMPLETE</h1>
-  <h2 class="text-2xl text-center text-light-200 font-bold tracking-wider my-1>Hold on...">You will soon be redirected</h2>
+  <h1
+    class="text-4xl text-center text-light-200 font-bold tracking-wider my-1>Hold on..."
+  >
+    LOADING COMPLETE
+  </h1>
+  <h2
+    class="text-2xl text-center text-light-200 font-bold tracking-wider my-1>Hold on..."
+  >
+    Now, what do you wanna do?
+  </h2>
 </div>
-

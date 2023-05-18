@@ -173,8 +173,6 @@
       }
     } catch (error) {
       console.error(error);
-      // Expected output: ReferenceError: nonExistentFunction is not defined
-      // (Note: the exact output may be browser-dependent)
     }
     //Setting up game
     questions = generate_questions(data.items);
@@ -186,7 +184,6 @@
 <section id="main_content" class="flex">
   <img id="bg" src={bgImage} alt="consert background" />
   <div class="m-30 mx-auto w-full">
-    <p>Test url: https://open.spotify.com/playlist/37i9dQZF1F0sijgNaJdgit</p>
     {#if need_new_token}
       <NotAuthed />
     {:else if game_state == 1}

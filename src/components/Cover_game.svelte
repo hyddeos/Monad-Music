@@ -3,7 +3,6 @@
   export let hard_level;
   export let game_over = 1;
   export let score_counter = 0;
-  console.log("hard lvl is:", hard_level[0]);
 
   hard_level++; // To avoid 0 value
 

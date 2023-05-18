@@ -1,5 +1,7 @@
 <script>
   import { browser } from "$app/environment";
+  let error_message = "";
+  let list_created_succesfully = false;
 
   let accessToken = "";
   if (browser) {
@@ -9,17 +11,29 @@
   async function generate_list() {
     const all_playlists = await get_playlists();
     const wrapped_lists_info = get_wrapped_lists_info(all_playlists);
-    const all_songs = await get_songs_from_lists(wrapped_lists_info);
-    const counted_data = analyze_songs(all_songs);
-    const reoccuring_songs = get_reoccuring_songs(counted_data.songs);
-    // -- add more filters here --
-    await create_playlist(reoccuring_songs);
+    if (wrapped_lists_info) {
+      const all_songs = await get_songs_from_lists(wrapped_lists_info);
+      const counted_data = analyze_songs(all_songs);
+      const reoccuring_songs = get_reoccuring_songs(counted_data.songs);
+      // -- add more filters here --
+      await create_playlist(reoccuring_songs);
+    } else {
+      console.error("Playlist already created or didt find new wrapped lists");
+      error_message =
+        "Playlist already created or we did not find any playlists to gather data from";
+    }
   }
 
   async function create_playlist(songs) {
     if (!browser) return;
 
     if (!accessToken) return;
+
+    /* ADDNING LIST REMOVE
+     * remove return
+     *
+     * */
+    return;
 
     const playlistResponse = await fetch(
       `https://api.spotify.com/v1/me/playlists`,
@@ -102,7 +116,9 @@
   function get_wrapped_lists_info(all_playlists) {
     let playlists_info = [];
     all_playlists.forEach((playlist) => {
-      if (
+      if (playlist.name.includes("By ESH")) {
+        return (playlists_info = []);
+      } else if (
         playlist.name.includes("Your Top Songs") ||
         playlist.name.includes("Dina topplåtar")
       ) {
@@ -178,5 +194,20 @@
       class="w-48 h-20 m-2 bg-prim-500 rounded text-center text-ellipsis overflow-hidden hover:bg-prim-400"
       ><strong>GENERATE LIST</strong></button
     >
+    {#if error_message}
+      <p
+        class="text-[#c94242] text-xl font-bold absolute inset-x-0 bottom-24 m-auto text-center"
+      >
+        {error_message}
+      </p>
+    {:else if list_created_succesfully}
+      <p
+        class="text-[#c94242] text-xl font-bold absolute inset-x-0 bottom-24 m-auto text-center"
+      >
+        List created succesfully. Check out your new playlist on Spotify called
+        "My Ultimate Playlist -- By ESH"
+      </p>
+    {/if}
+    <p />
   </div>
 </div>

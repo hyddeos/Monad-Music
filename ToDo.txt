@@ -2,8 +2,8 @@ Auth
     Fixa bättre och smidigare auth
     vidare befodra till rätt ställe
 Cover Album Game
-    Fixa knappar som visar om det är rätt eller flex
-    fixa bättre input av url
+    --------- Fixa knappar som visar om det är rätt eller flex
+    --------- fixa bättre input av url
 Ultimate list
     Se till så man inte kan skapa dubbletter
     Gör möjlighet till make public

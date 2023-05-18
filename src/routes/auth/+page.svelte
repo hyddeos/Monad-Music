@@ -40,7 +40,8 @@
   let codeVerifier = generateRandomString(128);
   generateCodeChallenge(codeVerifier).then(async (codeChallenge) => {
     let state = generateRandomString(16);
-    let scope = "user-read-private playlist-read-private playlist-modify-private";
+    let scope =
+      "user-read-private playlist-read-private playlist-modify-private";
     let args = new URLSearchParams({
       response_type: "code",
       client_id: client_id,
@@ -50,21 +51,23 @@
       code_challenge_method: "S256",
       code_challenge: codeChallenge,
     });
-    /*
-    // set cookie with code_verifier
-    setCookie("code_verifier", codeVerifier, { path: "/auth" });
-    */
     console.log("ARGS:", args);
     if (browser) {
       localStorage.setItem("code_verifier", codeVerifier);
       goto("https://accounts.spotify.com/authorize?" + args);
     }
-    // window.location = "https://accounts.spotify.com/authorize?" + args;
   });
 </script>
 
 <div class="m-auto pt-[15%] z-10 max-w-xl">
-  <h1 class="text-4xl text-center text-light-200 font-bold tracking-wider my-1>Hold on...">LOADING...</h1>
-  <h2 class="text-2xl text-center text-light-200 font-bold tracking-wider my-1>Hold on...">Connecting and searching for intressting data</h2>
+  <h1
+    class="text-4xl text-center text-light-200 font-bold tracking-wider my-1>Hold on..."
+  >
+    LOADING...
+  </h1>
+  <h2
+    class="text-2xl text-center text-light-200 font-bold tracking-wider my-1>Hold on..."
+  >
+    Connecting and searching for intressting data
+  </h2>
 </div>
-
