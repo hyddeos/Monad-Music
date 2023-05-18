@@ -1,8 +1,10 @@
 <script>
   import { browser } from "$app/environment";
+  import NotAuthed from "../components/NotAuthed.svelte";
   let error_message = "";
   let list_created_succesfully = false;
   let loading_list = false;
+  let need_new_token = false;
 
   let accessToken = "";
   if (browser) {
@@ -16,10 +18,14 @@
     const wrapped_lists_info = get_wrapped_lists_info(all_playlists);
     if (wrapped_lists_info) {
       const all_songs = await get_songs_from_lists(wrapped_lists_info);
+      const yearly_top_songs = await get_top_songs(wrapped_lists_info);
       const counted_data = analyze_songs(all_songs);
       const reoccuring_songs = get_reoccuring_songs(counted_data.songs);
-      // -- add more filters here --
-      await create_playlist(reoccuring_songs);
+      const ultimate_songs = filter_duplicates(
+        yearly_top_songs,
+        reoccuring_songs
+      );
+      await create_playlist(ultimate_songs);
     } else {
       loading_list = false;
       console.error("Playlist already created or didt find new wrapped lists");
@@ -31,7 +37,6 @@
   async function create_playlist(songs) {
     if (!browser) return;
     if (!accessToken) return;
-
     const playlistResponse = await fetch(
       `https://api.spotify.com/v1/me/playlists`,
       {
@@ -74,8 +79,17 @@
     console.log("Tracks added:", addedTracksData);
   }
 
+  function filter_duplicates(yearly_top_songs, reoccuring_songs) {
+    yearly_top_songs.forEach((song) => {
+      console.log(song.title_id);
+      if (!reoccuring_songs.includes(song.title_id)) {
+        reoccuring_songs.push(song.title_id);
+      }
+    });
+    return reoccuring_songs;
+  }
+
   function get_reoccuring_songs(all_songs) {
-    console.log("all", all_songs);
     let songs = [];
     all_songs.forEach((song) => {
       if (song.count > 1) {
@@ -83,6 +97,15 @@
       }
     });
     return songs;
+  }
+
+  async function get_top_songs(playlists) {
+    let top_songs = [];
+    for (const playlist of playlists) {
+      const songs = await get_songs(playlist.id);
+      top_songs = top_songs.concat(songs.slice(0, 5));
+    }
+    return top_songs;
   }
 
   function analyze_songs(all_songs) {
@@ -176,51 +199,68 @@
       }
     );
     const data = await response.json();
+    try {
+      if (data.error) {
+        if (data.error.status == 401) {
+          need_new_token = true;
+          loading_list = false;
+        } else {
+          error_message = "Werid, some error occured.";
+          loading_list = false;
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
     return data.items;
   }
 </script>
 
-<div class="bg-dark-900 p-6 rounded border-2 border-dark-700">
-  <div>
-    <h3 class="text-3xl text-center font-handwrite tracking-wider my-2">
-      Generate Your
-    </h3>
-    <h2 class="text-5xl text-center font-heading tracking-wider my-2">
-      ULTIMATE PLAYLIST
-    </h2>
-    <h5 class=" text-center tracking-wider my-2">
-      Get a <strong>Ultimate Playlist</strong> based on all your
-      <strong>Top Songs</strong> from all previous years!
-    </h5>
-  </div>
-  <div class="flex justify-center items-center m-auto">
-    {#if loading_list}
-      <button
-        class="w-48 h-20 m-2 bg-dark-500 rounded text-center text-ellipsis overflow-hidden hover:bg-dark-500"
-        ><strong>Loading...</strong></button
-      >
-    {:else}
-      <button
-        on:click={() => generate_list()}
-        class="w-48 h-20 m-2 bg-prim-500 rounded text-center text-ellipsis overflow-hidden hover:bg-prim-400"
-        ><strong>GENERATE LIST</strong></button
-      >
+{#if need_new_token}
+  <NotAuthed />
+{:else}
+  <div class="bg-dark-900 p-6 rounded border-2 border-dark-700">
+    <div>
+      <h3 class="text-3xl text-center font-handwrite tracking-wider my-2">
+        Generate Your
+      </h3>
+      <h2 class="text-5xl text-center font-heading tracking-wider my-2">
+        ULTIMATE PLAYLIST
+      </h2>
+      <h5 class=" text-center tracking-wider my-2">
+        Get a <strong>Ultimate Playlist</strong> based on all your
+        <strong>Top Songs</strong> from all previous years!
+      </h5>
+    </div>
+    <div class="flex justify-center items-center m-auto">
+      {#if loading_list}
+        <button
+          class="w-48 h-20 m-2 bg-dark-500 rounded text-center text-ellipsis overflow-hidden hover:bg-dark-500"
+          ><strong>Loading...</strong></button
+        >
+      {:else}
+        <button
+          on:click={() => generate_list()}
+          class="w-48 h-20 m-2 bg-prim-500 rounded text-center text-ellipsis overflow-hidden hover:bg-prim-400"
+          ><strong>GENERATE LIST</strong></button
+        >
+      {/if}
+    </div>
+    {#if error_message}
+      <p class="text-[#c94242] text-xl m-auto text-center">
+        {error_message}
+      </p>
+    {:else if list_created_succesfully}
+      <p class="text-[#42c968] text-xl font-bold m-auto text-center">
+        List created succesfully
+      </p>
+      <p class="text-l m-auto text-center">
+        Check out your new playlist on Spotify called:
+      </p>
+      <p class="text-xl font-bold m-auto text-center">
+        <strong>My Ultimate Playlist -- By ESH</strong>
+      </p>
     {/if}
+    <p />
   </div>
-  {#if error_message}
-    <p class="text-[#c94242] text-xl m-auto text-center">
-      {error_message}
-    </p>
-  {:else if list_created_succesfully}
-    <p class="text-[#42c968] text-xl font-bold m-auto text-center">
-      List created succesfully
-    </p>
-    <p class="text-l m-auto text-center">
-      Check out your new playlist on Spotify called:
-    </p>
-    <p class="text-xl font-bold m-auto text-center">
-      <strong>My Ultimate Playlist -- By ESH</strong>
-    </p>
-  {/if}
-  <p />
-</div>
+{/if}
