@@ -22,5 +22,12 @@
     <h3 class="text-3xl text-center tracking-wider my-2 font-heading">
       Albums Right
     </h3>
+    <h5 class="py-2">Want to try another playlist?</h5>
+    <a href="/coverartgame" data-sveltekit-reload>
+      <button
+        class="w-48 h-20 m-2 bg-prim-500 rounded text-center text-ellipsis overflow-hidden hover:bg-prim-400"
+        ><strong>NEW GAME</strong></button
+      >
+    </a>
   </div>
 </div>
