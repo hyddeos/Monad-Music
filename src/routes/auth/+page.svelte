@@ -2,9 +2,9 @@
   import { browser } from "$app/environment";
   import { goto } from "$app/navigation";
   const client_id = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
-  const client_secret = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET;
-  const client_refresh_token = import.meta.env.VITE_SPOTIFY_REFRESH_TOKEN;
+
   const redirectUri = import.meta.env.VITE_REDIRECT_URL;
+
   function generateRandomString(length) {
     let text = "";
     let possible =
@@ -51,7 +51,6 @@
       code_challenge_method: "S256",
       code_challenge: codeChallenge,
     });
-    console.log("ARGS:", args);
     if (browser) {
       localStorage.setItem("code_verifier", codeVerifier);
       goto("https://accounts.spotify.com/authorize?" + args);
