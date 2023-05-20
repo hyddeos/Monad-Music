@@ -2,7 +2,7 @@
   let year = new Date().getFullYear();
 </script>
 
-<footer class="absolute bottom-0 w-full">
+<footer class="w-full">
   <div
     class="flex flex-wrap text-center font-head font-thin justify-evenly text-light-400 m-auto"
   >

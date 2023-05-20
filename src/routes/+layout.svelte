@@ -8,15 +8,16 @@
   let accessToken = "";
   function run_auth_check() {
     if (!browser) return;
-      accessToken = localStorage.getItem("access_token");
+    accessToken = localStorage.getItem("access_token");
     if (!accessToken) return;
   }
   run_auth_check();
-
 </script>
 
-<div class="h-screen text-light-200">
-  <Header accessToken={accessToken} />
-  <slot  />
+<div class="h-screen flex flex-col text-light-200">
+  <Header {accessToken} />
+  <div class="flex-grow">
+    <slot />
+  </div>
   <Footer />
 </div>
