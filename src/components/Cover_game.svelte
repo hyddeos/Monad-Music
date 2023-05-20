@@ -28,6 +28,10 @@
     active_guess = album_id;
     let guess_btn = document.getElementById(`btn${active_guess}`);
     let right_btn = document.getElementById(`btn${right_answer}`);
+
+    //Shows the album in the right size after click
+    let hard_level_temp_holder = hard_level;
+    hard_level = 1;
     // Check if game is over
     if (current_question + 1 == questions.length) {
       game_over = 2;
@@ -43,8 +47,11 @@
       right_btn.style.backgroundColor = "#42c968"; // What was the right Anwser
     }
     active_guess = 99; // Reset guess to non-guess value
+
     setTimeout(() => {
       wait(2000);
+      // Reset before next question
+      hard_level = hard_level_temp_holder;
       guess_btn.style.backgroundColor = "";
       right_btn.style.backgroundColor = "";
       current_question++;

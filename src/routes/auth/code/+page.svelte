@@ -45,11 +45,25 @@
   <h1
     class="text-4xl text-center text-light-200 font-bold tracking-wider my-1>Hold on..."
   >
-    LOADING COMPLETE
+    AUTHENTICATION COMPLETE
   </h1>
-  <h2
-    class="text-2xl text-center text-light-200 font-bold tracking-wider my-1>Hold on..."
-  >
+  <h2 class="text-2xl text-center text-light-200 font-bold tracking-wider my-1">
     Now, what do you wanna do?
   </h2>
+  <div class="m-auto flex flex-wrap justify-center">
+    <a href="/coverartgame"
+      ><button
+        class="w-52 h-10 m-2 bg-sec-500 rounded text-center text-2xl font-heading text-dark-900 text-ellipsis overflow-hidden hover:bg-sec-400"
+      >
+        Cover Art Game
+      </button></a
+    >
+    <a href="/ultimateplaylist"
+      ><button
+        class="w-52 h-10 m-2 bg-sec-500 rounded text-center text-2xl font-heading text-dark-900 text-ellipsis overflow-hidden hover:bg-sec-400"
+      >
+        Ultimate Playlist
+      </button></a
+    >
+  </div>
 </div>
