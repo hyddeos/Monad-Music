@@ -180,7 +180,7 @@
 
 <section id="main_content" class="flex">
   <img id="bg" src={bgImage} alt="consert background" />
-  <div class="m-30 mx-auto w-full">
+  <div class="mt-30 mx-auto w-full">
     {#if need_new_token}
       <NotAuthed />
     {:else if game_state == 1}
@@ -193,7 +193,7 @@
     {:else if game_state == 2}
       <CoverGameOver score={total_score} questions={questions.length} />
     {:else}
-      <div class="p-1 0 m-auto mt-40 w-1/3 rounded-md h-96 relative">
+      <div class="m-auto mt-40 rounded-md h-96 relative">
         <img id="tape" src={tapeImage} alt="music tape" />
         <h2
           class="text-4xl text-center text-dark-900 font-handwrite tracking-wider my-1 absolute inset-x-0 top-12"
