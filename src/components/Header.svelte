@@ -76,7 +76,7 @@
           href="/ultimateplaylist">ULTIMATE PLAYLIST</a
         >
       </div>
-      <div>
+      <div class="absolute top-5 right-5 md:relative md:top-0">
         {#if accessToken}
           <p>
             <a
