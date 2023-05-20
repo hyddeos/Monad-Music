@@ -14,6 +14,10 @@
   run_auth_check();
 </script>
 
+<svelte:head>
+  <title>Monad Music</title>
+</svelte:head>
+
 <div class="h-screen flex flex-col text-light-200">
   <Header {accessToken} />
   <div class="flex-grow">
