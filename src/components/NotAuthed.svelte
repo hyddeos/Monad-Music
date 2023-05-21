@@ -2,7 +2,7 @@
   let access_token = localStorage.getItem("access_token");
 </script>
 
-<div class="m-auto pt-[15%] z-10 max-w-xl">
+<div class="p-2 m-auto mt-10 md:mt-40 z-10 max-w-xl">
   <div
     class="bg-dark-900 p-6 flex flex-col items-center rounded border-2 border-dark-700"
   >

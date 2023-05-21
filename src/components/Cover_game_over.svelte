@@ -3,9 +3,9 @@
   export let questions;
 </script>
 
-<div class="m-auto mt-40 z-10 flex justify-center">
+<div class="md:m-auto mt-20 md:mt-40 md:z-10 flex justify-center">
   <div
-    class="max-w-xl bg-dark-900 px-40 py-10 flex flex-col items-center rounded border-2 border-dark-700"
+    class="max-w-xl bg-dark-900 px-14 md:px-40 py-10 flex flex-col items-center rounded border-2 border-dark-700"
   >
     <h2 class="text-5xl text-center font-handwrite tracking-wider my-2">
       Results <span class="text-2xl text-light-300 text-right" />

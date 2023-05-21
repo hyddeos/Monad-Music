@@ -75,8 +75,24 @@
           class="font-heading text-gray-800 hover:text-prim-400"
           href="/ultimateplaylist">ULTIMATE PLAYLIST</a
         >
+        {#if accessToken}
+          <p>
+            <a
+              class="md:hidden font-heading text-sec-500 hover:text-prim-400"
+              href="/auth">Update Auth</a
+            >
+          </p>
+        {:else}
+          <p>
+            You are
+            <a
+              class="md:hidden font-heading text-sec-500 hover:text-prim-400"
+              href="/auth">NOT AUTHED</a
+            >
+          </p>
+        {/if}
       </div>
-      <div class="absolute top-5 right-5 md:relative md:top-0">
+      <div class="hidden md:block">
         {#if accessToken}
           <p>
             <a

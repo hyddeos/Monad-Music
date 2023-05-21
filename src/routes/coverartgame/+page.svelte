@@ -160,7 +160,6 @@
     });
     const data = await response.json();
     try {
-      console.log("--error", data);
       if (data.error) {
         if (data.error.status == 401) {
           need_new_token = true;
@@ -174,11 +173,10 @@
     //Setting up game
     questions = generate_questions(data.items);
     game_state = 1; // 1 = Inprogress
-    console.log("questions:", questions);
   }
 </script>
 
-<section id="main_content" class="flex">
+<section id="main_content mt-2" class="flex">
   <img id="bg" src={bgImage} alt="consert background" />
   <div class="mt-30 mx-auto w-full">
     {#if need_new_token}
@@ -193,40 +191,49 @@
     {:else if game_state == 2}
       <CoverGameOver score={total_score} questions={questions.length} />
     {:else}
-      <div class="m-auto mt-40 rounded-md h-96 relative">
-        <img id="tape" src={tapeImage} alt="music tape" />
+      <div
+        class="m-2 mt-8 md:h-96 py-6 md:py-0 relative bg-dark-900 md:bg-opacity-0 flex flex-col items-center rounded border-2 border-dark-700 md:border-0"
+      >
+        <img
+          class="hidden md:block"
+          id="tape"
+          src={tapeImage}
+          alt="music tape"
+        />
         <h2
-          class="text-4xl text-center text-dark-900 font-handwrite tracking-wider my-1 absolute inset-x-0 top-12"
+          class="text-4xl text-center text-light-200 md:text-dark-900 font-handwrite tracking-wider my-1 md:absolute inset-x-0 top-12"
         >
           Load Your Playlist!
         </h2>
         <h4
-          class="text-center text-dark-700 text-xl font-thin my-3 absolute inset-x-0 top-20"
+          class="text-center text-light-400 md:text-dark-700 text-xl font-thin my-3 md:absolute inset-x-0 top-20"
         >
           Spotify <span class="font-semibold">Playlist-URL</span> or
           <span class="font-semibold">Playlist-ID</span>
         </h4>
-        <div class="absolute inset-x-0 bottom-32 m-auto text-center">
+        <div class="md:absolute md:inset-x-0 md:bottom-32 m-auto text-center">
           <input
             type="text"
             placeholder="Insert Playlist here"
-            class="p-2 text-dark-900 rounded-md h-10 w-60 border border-light-400 focus:border-sec-500 focus:ring-sec-500"
+            class="p-2 m-2 md:m-0 text-dark-900 rounded-md h-10 w-60 border border-light-400 focus:border-sec-500 focus:ring-sec-500"
             bind:value={playlist_input}
           />
+          {#if error_message}
+            <p
+              class="text-[#c94242] text-lg font-bold md:absolute md:inset-x-0 md:bottom-12 md:bg-dark-900 md:max-w-lg md:rounded md:border-2 md:border-[#c94242] m-auto text-center p-2"
+            >
+              {error_message}
+            </p>
+          {/if}
           <button
             on:click={() => getPlaylist(playlist_input)}
             class="w-28 h-9 bg-prim-500 rounded text-center text-light-100 text-ellipsis overflow-hidden hover:bg-prim-400"
             >Start Game</button
           >
         </div>
-        <p
-          class="text-[#c94242] text-xl font-bold absolute inset-x-0 bottom-24 m-auto text-center"
-        >
-          {error_message}
-        </p>
       </div>
       <div
-        class="max-w-lg m-auto bg-dark-900 p-8 flex flex-col items-center rounded border-2 border-dark-700"
+        class="max-w-lg m-2 md:m-auto bg-dark-900 p-8 flex flex-col items-center rounded border-2 border-dark-700"
       >
         <h2
           class="text-xl text-center text-light-200 font-handwrite tracking-wider my-1"
@@ -262,7 +269,7 @@
           </span>
         </Slider>
         <p class="text-center m-2">
-          At higher levels you will see less of the album.
+          At higher levels you will see less of the album cover.
         </p>
       </div>
     {/if}

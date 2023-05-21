@@ -66,7 +66,9 @@
   }
 </script>
 
-<h2 class="text-5xl text-center font-handwrite tracking-wider my-2">
+<h2
+  class="m-auto text-xl md:text-5xl text-center font-handwrite tracking-wider my-2"
+>
   What Album Is This? <span class="text-2xl text-light-300 text-right"
     >({current_question + 1}/{questions.length})</span
   >
@@ -88,7 +90,7 @@
         id="btn{album[0].album_id}"
         on:click={() =>
           submit_guess(album[0].album_id, questions[current_question].answer)}
-        class="w-80 h-40 rounded bg-sec-800 text-center text-ellipsis overflow-hidden hover:bg-dark-100 hover:text-dark-700"
+        class="w-80 md:h-40 rounded bg-sec-800 text-center text-ellipsis overflow-hidden md:hover:bg-dark-100 md:hover:text-dark-700"
       >
         <h3 class="font-bold text-xl p-1">
           {album[0].album}
@@ -113,5 +115,12 @@
     -o-transform: scale(var(--hard_level));
     -ms-transform: scale(var(--hard_level));
     transform: scale(var(--hard_level));
+  }
+  @media screen and (max-width: 640px) {
+    #image_holder {
+      width: 320px;
+      height: 320px;
+      overflow: hidden;
+    }
   }
 </style>

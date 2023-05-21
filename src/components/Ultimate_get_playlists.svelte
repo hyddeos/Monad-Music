@@ -219,7 +219,7 @@
 {#if need_new_token}
   <NotAuthed />
 {:else}
-  <div class="bg-dark-900 p-6 rounded border-2 border-dark-700">
+  <div class="m-2 mt-2 bg-dark-900 p-6 rounded border-2 border-dark-700">
     <div>
       <h3 class="text-3xl text-center font-handwrite tracking-wider my-2">
         Generate Your
