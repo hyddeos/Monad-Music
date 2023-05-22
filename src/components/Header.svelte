@@ -33,7 +33,7 @@
         <!-- Mobile menu button -->
         <div
           on:click={toggleNavbar}
-          class="absolute top-5 left-12 flex md:hidden"
+          class="absolute top-5 left-8 flex md:hidden"
         >
           <button
             type="button"
