@@ -59,10 +59,6 @@
   });
 </script>
 
-<svelte:head>
-  <title>Monad Music</title>
-</svelte:head>
-
 <section class="text-center">
   <img id="bg" src={bgImage} alt="consert background" />
   <div class="bg-dark-900 w-full h-full fixed -z-30" />

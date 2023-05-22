@@ -1,16 +1,15 @@
 <script>
   import { browser } from "$app/environment";
   import NotAuthed from "../components/NotAuthed.svelte";
-  import Switch from './addons/Switch.svelte'
 
-  let shareable;
   let error_message = "";
   let loading_list = 0; // 0 = not loading, 1 = loading, 2 = loaded
   let need_new_token = false;
   let total_playlists = 0;
   let total_songs = 0;
-
   let accessToken = "";
+  let url_to_playlist = "";
+
   if (browser) {
     accessToken = localStorage.getItem("access_token");
   }
@@ -30,7 +29,7 @@
         reoccuring_songs
       );
       await create_playlist(ultimate_songs);
-      display_playlist_data(wrapped_lists_info.length, ultimate_songs.length)
+      display_playlist_data(wrapped_lists_info.length, ultimate_songs.length);
     } else {
       loading_list = false;
       console.error("Playlist already created or didt find new wrapped lists");
@@ -57,13 +56,18 @@
         },
         body: JSON.stringify({
           name: "My Ultimate List -- By ESH",
+          public: false,
           description:
             "This list is based on songs that you have played a lot over the years aswell as your most played songs from each year. Generated with Monad Music by ESH",
-          public: false,
         }),
       }
     );
     const playlistData = await playlistResponse.json();
+    url_to_playlist = playlistData.external_urls.spotify;
+    console.log("pl", playlistData.external_urls);
+
+    console.log("url", url_to_playlist);
+
     const playlistId = playlistData.id;
 
     // Add tracks to the playlist;
@@ -82,16 +86,12 @@
       }
     );
     const addedTracksData = await addTracksResponse.json();
-    list_created_succesfully = true;
-    loading_list = false;
 
-    console.log("Playlist created:", playlistData);
-    console.log("Tracks added:", addedTracksData);
+    loading_list = 2;
   }
 
   function filter_duplicates(yearly_top_songs, reoccuring_songs) {
     yearly_top_songs.forEach((song) => {
-      console.log(song.title_id);
       if (!reoccuring_songs.includes(song.title_id)) {
         reoccuring_songs.push(song.title_id);
       }
@@ -213,10 +213,10 @@
       if (data.error) {
         if (data.error.status == 401) {
           need_new_token = true;
-          loading_list = false;
+          loading_list = 0;
         } else {
           error_message = "Werid, some error occured.";
-          loading_list = false;
+          loading_list = 0;
         }
       }
     } catch (error) {
@@ -242,35 +242,55 @@
         <strong>Top Songs</strong> from all previous years!
       </h5>
     </div>
-    <div class="flex justify-center items-center m-auto">
+    <div class="m-auto">
       {#if loading_list == 1}
-        <button
-          class="w-48 h-20 m-2 bg-dark-500 rounded text-center text-ellipsis overflow-hidden hover:bg-dark-500"
-          ><strong>Loading...</strong></button
+        <center>
+          <button
+            class="w-48 h-20 m-2 bg-dark-500 rounded text-center text-ellipsis overflow-hidden hover:bg-dark-500"
+            ><strong>Loading...</strong></button
+          ></center
         >
       {:else if loading_list == 2}
-      <p class="text-[#42c968] text-xl font-bold m-auto text-center">
-        List created succesfully
-      </p>
-      <p class="text-m m-auto text-center">
-        Playlists Analyzed: <strong class="text-sec-400">{total_playlists}</strong>
-      </p>
-      <p class="text-m m-auto text-center">
-        Songs Added: <strong class="text-sec-400">{total_songs}</strong>
-      </p>
-      <p class="text-l m-auto text-center">
-        Check out your new playlist on Spotify called:
-      </p>
-      <p class="text-xl font-bold m-auto text-center">
-        <strong>My Ultimate Playlist -- By ESH</strong>
-      </p>
+        <p class="text-[#42c968] text-xl font-bold m-auto mt-6 text-center">
+          List created succesfully
+        </p>
+        <p class="text-m m-auto text-center">
+          Playlists Analyzed: <strong class="text-sec-400"
+            >{total_playlists}</strong
+          >
+        </p>
+        <p class="text-m m-auto text-center">
+          Songs Added: <strong class="text-sec-400">{total_songs}</strong>
+        </p>
+        <p class="text-xl font-bold m-auto mt-8 text-center">
+          Check out your new playlist on Spotify called:
+        </p>
+        <p class="text-l text-light-400 m-auto text-center">
+          <strong>My Ultimate Playlist -- By ESH</strong>
+        </p>
+        <center>
+          <p class="text-center text-l mt-8">
+            Share this playlist with your friends
+          </p>
+          <button
+            on:click={() => generate_list()}
+            class="w-48 h-20 m-2 bg-prim-500 rounded text-center text-ellipsis overflow-hidden hover:bg-prim-400"
+            ><strong>SHARE PLAYLIST</strong></button
+          >
+          <p class="font-bold">
+            The link has been saved to your clipboard. You can now easily paste
+            it wherever you want to share it
+          </p>
+          <p class="text-light-600">link: {url_to_playlist}</p>
+        </center>
       {:else}
-         <Switch bind:value={shareable} label="Shareable" design="inner" />
-        <button
-          on:click={() => generate_list()}
-          class="w-48 h-20 m-2 bg-prim-500 rounded text-center text-ellipsis overflow-hidden hover:bg-prim-400"
-          ><strong>GENERATE LIST</strong></button
-        >
+        <center>
+          <button
+            on:click={() => generate_list()}
+            class="w-48 h-20 m-2 bg-prim-500 rounded text-center text-ellipsis overflow-hidden hover:bg-prim-400"
+            ><strong>GENERATE PLAYLIST</strong></button
+          >
+        </center>
       {/if}
     </div>
     {#if error_message}
@@ -279,7 +299,10 @@
       </p>
     {/if}
     <p />
-    <p class="text-center text-light-400">{ loading_list == 2 ? "" : "This will create a new playlist on your Spotify account." }
-    
+    <p class="text-center text-light-400">
+      {loading_list == 2
+        ? ""
+        : "This will create a new playlist on your Spotify account."}
+    </p>
   </div>
 {/if}
