@@ -3,8 +3,10 @@
   import NotAuthed from "../components/NotAuthed.svelte";
   let error_message = "";
   let list_created_succesfully = false;
-  let loading_list = false;
+  let loading_list = 0; // 0 = not loading, 1 = loading, 2 = loaded
   let need_new_token = false;
+  let total_playlists = 0;
+  let total_songs = 0;
 
   let accessToken = "";
   if (browser) {
@@ -26,12 +28,18 @@
         reoccuring_songs
       );
       await create_playlist(ultimate_songs);
+      display_playlist_data(wrapped_lists_info.length, ultimate_songs.length)
     } else {
       loading_list = false;
       console.error("Playlist already created or didt find new wrapped lists");
       error_message =
         "Playlist already created or we did not find any playlists to gather data from";
     }
+  }
+
+  function display_playlist_data(playlists, songs) {
+    total_playlists = playlists;
+    total_songs = songs;
   }
 
   async function create_playlist(songs) {
@@ -233,11 +241,27 @@
       </h5>
     </div>
     <div class="flex justify-center items-center m-auto">
-      {#if loading_list}
+      {#if loading_list == 1}
         <button
           class="w-48 h-20 m-2 bg-dark-500 rounded text-center text-ellipsis overflow-hidden hover:bg-dark-500"
           ><strong>Loading...</strong></button
         >
+      {:else if loading_list == 2}
+      <p class="text-[#42c968] text-xl font-bold m-auto text-center">
+        List created succesfully
+      </p>
+      <p class="text-m m-auto text-center">
+        Playlists Analyzed: <strong class="text-sec-400">{total_playlists}</strong>
+      </p>
+      <p class="text-m m-auto text-center">
+        Songs Added: <strong class="text-sec-400">{total_songs}</strong>
+      </p>
+      <p class="text-l m-auto text-center">
+        Check out your new playlist on Spotify called:
+      </p>
+      <p class="text-xl font-bold m-auto text-center">
+        <strong>My Ultimate Playlist -- By ESH</strong>
+      </p>
       {:else}
         <button
           on:click={() => generate_list()}
@@ -249,16 +273,6 @@
     {#if error_message}
       <p class="text-[#c94242] text-xl m-auto text-center">
         {error_message}
-      </p>
-    {:else if list_created_succesfully}
-      <p class="text-[#42c968] text-xl font-bold m-auto text-center">
-        List created succesfully
-      </p>
-      <p class="text-l m-auto text-center">
-        Check out your new playlist on Spotify called:
-      </p>
-      <p class="text-xl font-bold m-auto text-center">
-        <strong>My Ultimate Playlist -- By ESH</strong>
       </p>
     {/if}
     <p />
