@@ -1,6 +1,9 @@
 <script>
   import { browser } from "$app/environment";
   import NotAuthed from "../components/NotAuthed.svelte";
+  import Switch from './addons/Switch.svelte'
+
+  let shareable;
   let error_message = "";
   let loading_list = 0; // 0 = not loading, 1 = loading, 2 = loaded
   let need_new_token = false;
@@ -262,6 +265,7 @@
         <strong>My Ultimate Playlist -- By ESH</strong>
       </p>
       {:else}
+         <Switch bind:value={shareable} label="Shareable" design="inner" />
         <button
           on:click={() => generate_list()}
           class="w-48 h-20 m-2 bg-prim-500 rounded text-center text-ellipsis overflow-hidden hover:bg-prim-400"
@@ -275,5 +279,7 @@
       </p>
     {/if}
     <p />
+    <p class="text-center text-light-400">{ loading_list == 2 ? "" : "This will create a new playlist on your Spotify account." }
+    
   </div>
 {/if}
