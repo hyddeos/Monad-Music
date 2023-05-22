@@ -2,7 +2,6 @@
   import { browser } from "$app/environment";
   import NotAuthed from "../components/NotAuthed.svelte";
   let error_message = "";
-  let list_created_succesfully = false;
   let loading_list = 0; // 0 = not loading, 1 = loading, 2 = loaded
   let need_new_token = false;
   let total_playlists = 0;
