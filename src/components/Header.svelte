@@ -83,7 +83,7 @@
             >
           </p>
         {:else}
-          <p>
+          <p class="md:hidden">
             You are
             <a
               class="md:hidden font-heading text-sec-500 hover:text-prim-400"
