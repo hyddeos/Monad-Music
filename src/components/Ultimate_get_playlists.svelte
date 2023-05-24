@@ -1,7 +1,18 @@
 <script>
   import { browser } from "$app/environment";
   import NotAuthed from "../components/NotAuthed.svelte";
-  import { ShareButton, FacebookShareButton, TwitterShareButton, EmailShareButton, CopyLinkButton } from 'svelte-share';
+  import {
+    Email,
+    Reddit,
+    WhatsApp,
+    Facebook,
+    Twitter,
+  } from "svelte-share-buttons-component";
+
+  const title = "My Ultimate Spotify Playlist";
+  const desc =
+    "This is my Ultimate Spotify playlist. Its based on all my previous years on spotify. Have a listen!";
+  let url = "";
 
   let error_message = "";
   let loading_list = 0; // 0 = not loading, 1 = loading, 2 = loaded
@@ -9,7 +20,6 @@
   let total_playlists = 0;
   let total_songs = 0;
   let accessToken = "";
-  let url_to_playlist = "";
 
   if (browser) {
     accessToken = localStorage.getItem("access_token");
@@ -64,10 +74,7 @@
       }
     );
     const playlistData = await playlistResponse.json();
-    url_to_playlist = playlistData.external_urls.spotify;
-    console.log("pl", playlistData.external_urls);
-
-    console.log("url", url_to_playlist);
+    url = playlistData.external_urls.spotify;
 
     const playlistId = playlistData.id;
 
@@ -87,7 +94,6 @@
       }
     );
     const addedTracksData = await addTracksResponse.json();
-
     loading_list = 2;
   }
 
@@ -267,50 +273,31 @@
           Check out your new playlist on Spotify called:
         </p>
         <p class="text-l text-light-400 m-auto text-center">
-          <strong>My Ultimate Playlist -- By ESH</strong>
+          <a href={url}
+            ><strong class="text-prim-400"
+              >My Ultimate Playlist -- By ESH</strong
+            ></a
+          >
         </p>
         <center>
-          <p class="text-center text-l mt-8">
+          <p class="text-center text-l font-bold mt-8">
             Share this playlist with your friends
           </p>
-          <ShareButton url={url_to_playlist}>
-            Share
-          </ShareButton>
-
-          <CopyLinkButton url={url_to_playlist}>
-            Copy Link
-          </CopyLinkButton>
-          
-          <FacebookShareButton url={url_to_playlist}>
-            Share on Facebook
-          </FacebookShareButton>
-          
-          <TwitterShareButton url={url_to_playlist}>
-            Share on Twitter
-          </TwitterShareButton>
-          
-          <EmailShareButton url={url_to_playlist}>
-            Share via Email
-          </EmailShareButton>
-          
-
-          Replace yourShareUrl with the actual URL you want to share or copy.
-          
-          The "svelte-share" package provides similar functionality as "react-share" but tailored specifically for Svelte applications. You can refer to the package documentation for more details on customization and additional options: svelte-share on npm.
-          
-          Please note that as of my knowledge cutoff in September 2021, there might be other packages available, so it's always a good idea to explore the Svelte ecosystem or search for the latest packages to suit your specific needs.
-          
-          
-          
-          
-          
-          
-          
-          <p class="font-bold">
-            The link has been saved to your clipboard. You can now easily paste
-            it wherever you want to share it
-          </p>
-          <p class="text-light-600">link: {url_to_playlist}</p>
+          <div>
+            <Email subject={title} body="{desc} {url}" />
+            <Reddit class="share-button" {title} {url} />
+            <WhatsApp class="share-button" text="{title} {url}" />
+            <Facebook class="share-button" quote={title} {url} />
+            <Twitter
+              class="share-button"
+              text={title}
+              {url}
+              hashtags="github,svelte"
+              via="username"
+              related="other,users"
+            />
+          </div>
+          <p class="text-light-600">or copy this url: {url}</p>
         </center>
       {:else}
         <center>
