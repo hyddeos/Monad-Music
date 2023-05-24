@@ -3,6 +3,7 @@
 </script>
 
 <div class="p-2 m-auto mt-10 md:mt-0 z-10 max-w-xl">
+  <img id="bg" src={bgImage} alt="consert background" />
   <div
     class="bg-dark-900 p-6 flex flex-col items-center rounded border-2 border-dark-700"
   >
