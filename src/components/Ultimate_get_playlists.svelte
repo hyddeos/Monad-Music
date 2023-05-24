@@ -11,7 +11,7 @@
 
   const title = "My Ultimate Spotify Playlist";
   const desc =
-    "This is my Ultimate Spotify playlist. Its based on all my previous years on spotify. Have a listen!";
+    "This is my Ultimate Spotify playlist. Its based on all my previous years on spotify. Have a listen or make your own list over at https://music.eshtropy.se";
   let url = "";
 
   let error_message = "";
@@ -69,7 +69,7 @@
           name: "My Ultimate List -- By ESH",
           public: false,
           description:
-            "This list is based on songs that you have played a lot over the years aswell as your most played songs from each year. Generated with Monad Music by ESH",
+            "This list is based on songs that you have played a lot over the years aswell as your most played songs from each year. Generated over at https://music.eshtropy.se",
         }),
       }
     );
