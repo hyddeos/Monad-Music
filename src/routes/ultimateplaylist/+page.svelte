@@ -2,8 +2,6 @@
   import UltimateGetPlaylists from "../../components/Ultimate_get_playlists.svelte";
 
   let bgImage = "/bg.jpg";
-
-  let playlists = [];
 </script>
 
 <section id="main_content" class="flex">

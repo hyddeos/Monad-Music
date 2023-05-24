@@ -1,12 +1,26 @@
 <script>
   import { browser } from "$app/environment";
   import NotAuthed from "../components/NotAuthed.svelte";
-  let error_message = "";
-  let list_created_succesfully = false;
-  let loading_list = false;
-  let need_new_token = false;
+  import {
+    Email,
+    Reddit,
+    WhatsApp,
+    Facebook,
+    Twitter,
+  } from "svelte-share-buttons-component";
 
+  const title = "My Ultimate Spotify Playlist";
+  const desc =
+    "This is my Ultimate Spotify playlist. Its based on all my previous years on spotify. Have a listen or make your own list over at https://music.eshtropy.se";
+  let url = "";
+
+  let error_message = "";
+  let loading_list = 0; // 0 = not loading, 1 = loading, 2 = loaded
+  let need_new_token = false;
+  let total_playlists = 0;
+  let total_songs = 0;
   let accessToken = "";
+
   if (browser) {
     accessToken = localStorage.getItem("access_token");
   }
@@ -26,12 +40,18 @@
         reoccuring_songs
       );
       await create_playlist(ultimate_songs);
+      display_playlist_data(wrapped_lists_info.length, ultimate_songs.length);
     } else {
       loading_list = false;
       console.error("Playlist already created or didt find new wrapped lists");
       error_message =
         "Playlist already created or we did not find any playlists to gather data from";
     }
+  }
+
+  function display_playlist_data(playlists, songs) {
+    total_playlists = playlists;
+    total_songs = songs;
   }
 
   async function create_playlist(songs) {
@@ -47,13 +67,15 @@
         },
         body: JSON.stringify({
           name: "My Ultimate List -- By ESH",
-          description:
-            "This list is based on songs that you have played a lot over the years aswell as your most played songs from each year. Generated with Monad Music by ESH",
           public: false,
+          description:
+            "This list is based on songs that you have played a lot over the years aswell as your most played songs from each year. Generated over at https://music.eshtropy.se",
         }),
       }
     );
     const playlistData = await playlistResponse.json();
+    url = playlistData.external_urls.spotify;
+
     const playlistId = playlistData.id;
 
     // Add tracks to the playlist;
@@ -72,16 +94,11 @@
       }
     );
     const addedTracksData = await addTracksResponse.json();
-    list_created_succesfully = true;
-    loading_list = false;
-
-    console.log("Playlist created:", playlistData);
-    console.log("Tracks added:", addedTracksData);
+    loading_list = 2;
   }
 
   function filter_duplicates(yearly_top_songs, reoccuring_songs) {
     yearly_top_songs.forEach((song) => {
-      console.log(song.title_id);
       if (!reoccuring_songs.includes(song.title_id)) {
         reoccuring_songs.push(song.title_id);
       }
@@ -203,10 +220,10 @@
       if (data.error) {
         if (data.error.status == 401) {
           need_new_token = true;
-          loading_list = false;
+          loading_list = 0;
         } else {
           error_message = "Werid, some error occured.";
-          loading_list = false;
+          loading_list = 0;
         }
       }
     } catch (error) {
@@ -232,35 +249,76 @@
         <strong>Top Songs</strong> from all previous years!
       </h5>
     </div>
-    <div class="flex justify-center items-center m-auto">
-      {#if loading_list}
-        <button
-          class="w-48 h-20 m-2 bg-dark-500 rounded text-center text-ellipsis overflow-hidden hover:bg-dark-500"
-          ><strong>Loading...</strong></button
+    <div class="m-auto">
+      {#if loading_list == 1}
+        <center>
+          <button
+            class="w-48 h-20 m-2 bg-dark-500 rounded text-center text-ellipsis overflow-hidden hover:bg-dark-500"
+            ><strong>Loading...</strong></button
+          ></center
         >
+      {:else if loading_list == 2}
+        <p class="text-[#42c968] text-xl font-bold m-auto mt-6 text-center">
+          List created succesfully
+        </p>
+        <p class="text-m m-auto text-center">
+          Playlists Analyzed: <strong class="text-sec-400"
+            >{total_playlists}</strong
+          >
+        </p>
+        <p class="text-m m-auto text-center">
+          Songs Added: <strong class="text-sec-400">{total_songs}</strong>
+        </p>
+        <p class="text-xl font-bold m-auto mt-8 text-center">
+          Check out your new playlist on Spotify:
+        </p>
+        <p class="text-l text-light-400 m-auto text-center">
+          <a href={url}
+            ><strong class="text-prim-400"
+              >My Ultimate Playlist -- By ESH</strong
+            ></a
+          >
+        </p>
+        <center>
+          <p class="text-center text-l font-bold mt-8">
+            Share this playlist with your friends
+          </p>
+          <div>
+            <Email subject={title} body="{desc} {url}" />
+            <Reddit class="share-button" {title} {url} />
+            <WhatsApp class="share-button" text="{title} {url}" />
+            <Facebook class="share-button" quote={title} {url} />
+            <Twitter
+              class="share-button"
+              text={title}
+              {url}
+              hashtags="github,svelte"
+              via="username"
+              related="other,users"
+            />
+          </div>
+          <p class="text-light-600">or copy this url: {url}</p>
+        </center>
       {:else}
-        <button
-          on:click={() => generate_list()}
-          class="w-48 h-20 m-2 bg-prim-500 rounded text-center text-ellipsis overflow-hidden hover:bg-prim-400"
-          ><strong>GENERATE LIST</strong></button
-        >
+        <center>
+          <button
+            on:click={() => generate_list()}
+            class="w-48 h-20 m-2 bg-prim-500 rounded text-center text-ellipsis overflow-hidden hover:bg-prim-400"
+            ><strong>GENERATE PLAYLIST</strong></button
+          >
+        </center>
       {/if}
     </div>
     {#if error_message}
       <p class="text-[#c94242] text-xl m-auto text-center">
         {error_message}
       </p>
-    {:else if list_created_succesfully}
-      <p class="text-[#42c968] text-xl font-bold m-auto text-center">
-        List created succesfully
-      </p>
-      <p class="text-l m-auto text-center">
-        Check out your new playlist on Spotify called:
-      </p>
-      <p class="text-xl font-bold m-auto text-center">
-        <strong>My Ultimate Playlist -- By ESH</strong>
-      </p>
     {/if}
     <p />
+    <p class="text-center text-light-400">
+      {loading_list == 2
+        ? ""
+        : "This will create a new playlist on your Spotify account."}
+    </p>
   </div>
 {/if}
