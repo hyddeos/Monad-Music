@@ -270,7 +270,7 @@
           Songs Added: <strong class="text-sec-400">{total_songs}</strong>
         </p>
         <p class="text-xl font-bold m-auto mt-8 text-center">
-          Check out your new playlist on Spotify called:
+          Check out your new playlist on Spotify:
         </p>
         <p class="text-l text-light-400 m-auto text-center">
           <a href={url}
