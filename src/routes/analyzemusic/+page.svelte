@@ -1,12 +1,12 @@
 <script>
-  import UltimateGetPlaylists from "../../components/Ultimate_get_playlists.svelte";
+  import AnalyzeTaste from "../../components/Analyze_taste.svelte";
   let bgImage = "/bg.jpg";
 </script>
 
 <section id="main_content" class="flex">
   <img id="bg" src={bgImage} alt="consert background" />
   <div class="m-auto pt-[15%]">
-    <UltimateGetPlaylists />
+    <AnalyzeTaste />
     <div />
   </div>
 </section>

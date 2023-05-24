@@ -17,9 +17,11 @@
   let error_message = "";
   let loading_list = 0; // 0 = not loading, 1 = loading, 2 = loaded
   let need_new_token = false;
-  let total_playlists = 0;
+  let total_years = 0;
   let total_songs = 0;
   let accessToken = "";
+
+  let songs;
 
   if (browser) {
     accessToken = localStorage.getItem("access_token");
@@ -32,15 +34,12 @@
     const wrapped_lists_info = get_wrapped_lists_info(all_playlists);
     if (wrapped_lists_info) {
       const all_songs = await get_songs_from_lists(wrapped_lists_info);
-      const yearly_top_songs = await get_top_songs(wrapped_lists_info);
+      const yearly_top_songs = await get_top_songs(wrapped_lists_info); // Display Each years 5 top songs
       const counted_data = analyze_songs(all_songs);
       const reoccuring_songs = get_reoccuring_songs(counted_data.songs);
-      const ultimate_songs = filter_duplicates(
-        yearly_top_songs,
-        reoccuring_songs
-      );
-      await create_playlist(ultimate_songs);
-      display_playlist_data(wrapped_lists_info.length, ultimate_songs.length);
+      display_analzyed_data(wrapped_lists_info.length, all_songs.length);
+      songs = all_songs;
+      loading_list = 2;
     } else {
       loading_list = false;
       console.error("Playlist already created or didt find new wrapped lists");
@@ -49,18 +48,9 @@
     }
   }
 
-  function display_playlist_data(playlists, songs) {
-    total_playlists = playlists;
+  function display_analzyed_data(years, songs) {
+    total_years = years;
     total_songs = songs;
-  }
-
-  function filter_duplicates(yearly_top_songs, reoccuring_songs) {
-    yearly_top_songs.forEach((song) => {
-      if (!reoccuring_songs.includes(song.title_id)) {
-        reoccuring_songs.push(song.title_id);
-      }
-    });
-    return reoccuring_songs;
   }
 
   function get_reoccuring_songs(all_songs) {
@@ -106,6 +96,7 @@
         .map(([id, count]) => ({ id, count }))
         .sort(sortDescending),
     };
+    console.log("sorted", sortedData);
     return sortedData;
   }
 
@@ -113,9 +104,7 @@
     let playlists_info = [];
     let ultimate_list_duplet = false;
     all_playlists.forEach((playlist) => {
-      if (playlist.name.includes("My Ultimate List -- By ESH")) {
-        ultimate_list_duplet = true;
-      } else if (
+      if (
         playlist.name.includes("Your Top Songs") ||
         playlist.name.includes("Dina topplåtar")
       ) {
@@ -156,6 +145,7 @@
       title: song.track.name,
       title_id: song.track.id,
       place_on_list: index + 1,
+      playlist_id: playlist_id,
     }));
     return songs;
   }
@@ -207,7 +197,7 @@
       </h5>
     </div>
     <div class="flex justify-center items-center m-auto">
-      {#if loading_list}
+      {#if loading_list == 1}
         <button
           class="w-48 h-20 m-2 bg-dark-500 rounded text-center text-ellipsis overflow-hidden hover:bg-dark-500"
           ><strong>Loading...</strong></button
@@ -224,16 +214,23 @@
       <p class="text-[#c94242] text-xl m-auto text-center">
         {error_message}
       </p>
-    {:else if list_created_succesfully}
+    {:else if loading_list == 2}
       <p class="text-[#42c968] text-xl font-bold m-auto text-center">
         List created succesfully
       </p>
-      <p class="text-l m-auto text-center">
-        Check out your new playlist on Spotify called:
+      <p class="text-m m-auto text-center">
+        Years Analyzed: <strong class="text-sec-400">{total_years}</strong>
       </p>
-      <p class="text-xl font-bold m-auto text-center">
-        <strong>My Ultimate Playlist -- By ESH</strong>
+      <p class="text-m m-auto text-center">
+        Songs Analyzed: <strong class="text-sec-400">{total_songs}</strong>
       </p>
+      <h2 class="text-left">TOP SONGS</h2>
+      <h4 class="left-left">
+        Number of times song has occured on Wrapped-list
+      </h4>
+      {#each all_songs[songs] as song}
+        <p>{song}</p>
+      {/each}
     {/if}
     <p />
   </div>
