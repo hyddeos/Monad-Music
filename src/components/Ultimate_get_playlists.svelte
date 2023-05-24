@@ -1,6 +1,7 @@
 <script>
   import { browser } from "$app/environment";
   import NotAuthed from "../components/NotAuthed.svelte";
+  import { ShareButton, FacebookShareButton, TwitterShareButton, EmailShareButton, CopyLinkButton } from 'svelte-share';
 
   let error_message = "";
   let loading_list = 0; // 0 = not loading, 1 = loading, 2 = loaded
@@ -272,11 +273,39 @@
           <p class="text-center text-l mt-8">
             Share this playlist with your friends
           </p>
-          <button
-            on:click={() => generate_list()}
-            class="w-48 h-20 m-2 bg-prim-500 rounded text-center text-ellipsis overflow-hidden hover:bg-prim-400"
-            ><strong>SHARE PLAYLIST</strong></button
-          >
+          <ShareButton url={url_to_playlist}>
+            Share
+          </ShareButton>
+
+          <CopyLinkButton url={url_to_playlist}>
+            Copy Link
+          </CopyLinkButton>
+          
+          <FacebookShareButton url={url_to_playlist}>
+            Share on Facebook
+          </FacebookShareButton>
+          
+          <TwitterShareButton url={url_to_playlist}>
+            Share on Twitter
+          </TwitterShareButton>
+          
+          <EmailShareButton url={url_to_playlist}>
+            Share via Email
+          </EmailShareButton>
+          
+
+          Replace yourShareUrl with the actual URL you want to share or copy.
+          
+          The "svelte-share" package provides similar functionality as "react-share" but tailored specifically for Svelte applications. You can refer to the package documentation for more details on customization and additional options: svelte-share on npm.
+          
+          Please note that as of my knowledge cutoff in September 2021, there might be other packages available, so it's always a good idea to explore the Svelte ecosystem or search for the latest packages to suit your specific needs.
+          
+          
+          
+          
+          
+          
+          
           <p class="font-bold">
             The link has been saved to your clipboard. You can now easily paste
             it wherever you want to share it

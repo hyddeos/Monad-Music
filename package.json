@@ -22,6 +22,7 @@
   },
   "type": "module",
   "dependencies": {
-    "@sveltejs/adapter-node": "^1.2.4"
+    "@sveltejs/adapter-node": "^1.2.4",
+    "svelte-share": "^0.0.0"
   }
 }
