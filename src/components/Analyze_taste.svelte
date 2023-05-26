@@ -8,6 +8,7 @@
     Facebook,
     Twitter,
   } from "svelte-share-buttons-component";
+  import DisplayTaste from "./Display_taste.svelte";
 
   const title = "My Ultimate Spotify Playlist";
   const desc =
@@ -192,7 +193,7 @@
         ANALYZE MUSIC TASTE
       </h2>
       <h5 class=" text-center tracking-wider my-2">
-        Let´s summerize all your years on Spotify and see your music taste
+        Summerizes all your years on Spotify and analzes your music taste
         indepth
       </h5>
     </div>
@@ -215,23 +216,14 @@
         {error_message}
       </p>
     {:else if loading_list == 2}
-      <p class="text-[#42c968] text-xl font-bold m-auto text-center">
-        List created succesfully
+      <p class="font-heading text-xl font-bold m-auto text-center">
+        Your Music
       </p>
       <p class="text-m m-auto text-center">
-        Years Analyzed: <strong class="text-sec-400">{total_years}</strong>
-      </p>
-      <p class="text-m m-auto text-center">
-        Songs Analyzed: <strong class="text-sec-400">{total_songs}</strong>
-      </p>
-      <h2 class="text-left">TOP SONGS</h2>
-      <h4 class="left-left">
-        Number of times song has occured on Wrapped-list
-      </h4>
-      {#each all_songs[songs] as song}
-        <p>{song}</p>
-      {/each}
+        Years Analyzed: <strong class="text-sec-400">{total_years}</strong> Songs Analyzed: <strong class="text-sec-400">{total_songs}</strong>
+      </p>       
     {/if}
+    <DisplayTaste />
     <p />
   </div>
 {/if}
