@@ -35,6 +35,7 @@
     const wrapped_lists_info = get_wrapped_lists_info(all_playlists);
     if (wrapped_lists_info) {
       const all_songs = await get_songs_from_lists(wrapped_lists_info);
+      const years_analyzed = get_years(wrapped_lists_info);
       const yearly_top_songs = await get_top_songs(wrapped_lists_info); // Display Each years 5 top songs
       const counted_data = analyze_songs(all_songs);
       const reoccuring_songs = get_reoccuring_songs(counted_data.songs);
@@ -47,6 +48,21 @@
       error_message =
         "Playlist already created or we did not find any playlists to gather data from";
     }
+  }
+
+  function get_years(playlists) {
+    let years = [];
+    console.log("years", playlists);
+    playlists.forEach((playlist) => {
+      console.log("year", playlist.name);
+      const regex = /[0-9]+/;
+      const get_year = playlist.name.match(regex)[0];
+      years.push({
+        year: get_year,
+      });
+    });
+    console.log("years", years);
+    return years;
   }
 
   function display_analzyed_data(years, songs) {
@@ -220,8 +236,9 @@
         Your Music
       </p>
       <p class="text-m m-auto text-center">
-        Years Analyzed: <strong class="text-sec-400">{total_years}</strong> Songs Analyzed: <strong class="text-sec-400">{total_songs}</strong>
-      </p>       
+        Years Analyzed: <strong class="text-sec-400">{total_years}</strong>
+        Songs Analyzed: <strong class="text-sec-400">{total_songs}</strong>
+      </p>
     {/if}
     <DisplayTaste />
     <p />
