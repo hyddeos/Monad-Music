@@ -1,29 +1,15 @@
 <script>
   import { browser } from "$app/environment";
   import NotAuthed from "../components/NotAuthed.svelte";
-  import {
-    Email,
-    Reddit,
-    WhatsApp,
-    Facebook,
-    Twitter,
-  } from "svelte-share-buttons-component";
   import DisplayTaste from "./Display_taste.svelte";
-
-  const title = "My Ultimate Spotify Playlist";
-  const desc =
-    "This is my Ultimate Spotify playlist. Its based on all my previous years on spotify. Have a listen or make your own list over at https://music.eshtropy.se";
-  let url = "";
 
   let error_message = "";
   let loading_list = 0; // 0 = not loading, 1 = loading, 2 = loaded
   let need_new_token = false;
-  let total_years = 0;
-  let total_songs = 0;
-  let accessToken = "";
-
+  let total_years = [];
   let songs;
 
+  let accessToken = "";
   if (browser) {
     accessToken = localStorage.getItem("access_token");
   }
@@ -34,14 +20,17 @@
     const all_playlists = await get_playlists();
     const wrapped_lists_info = get_wrapped_lists_info(all_playlists);
     if (wrapped_lists_info) {
-      const all_songs = await get_songs_from_lists(wrapped_lists_info);
-      const years_analyzed = get_years(wrapped_lists_info);
-      const yearly_top_songs = await get_top_songs(wrapped_lists_info); // Display Each years 5 top songs
+      const years_analyzed = await get_years(wrapped_lists_info);
+      const all_songs = await get_songs_from_lists(
+        wrapped_lists_info,
+        years_analyzed
+      );
       const counted_data = analyze_songs(all_songs);
       const reoccuring_songs = get_reoccuring_songs(counted_data.songs);
-      display_analzyed_data(wrapped_lists_info.length, all_songs.length);
+      const sorted_data = display_analzyed_data(years_analyzed);
       songs = all_songs;
       loading_list = 2;
+      console.log("TOTAL", total_years);
     } else {
       loading_list = false;
       console.error("Playlist already created or didt find new wrapped lists");
@@ -50,24 +39,26 @@
     }
   }
 
-  function get_years(playlists) {
+  async function get_years(playlists) {
     let years = [];
-    console.log("years", playlists);
     playlists.forEach((playlist) => {
-      console.log("year", playlist.name);
       const regex = /[0-9]+/;
       const get_year = playlist.name.match(regex)[0];
       years.push({
         year: get_year,
+        playlist_id: playlist.id,
+        songs: [],
+        albums: [],
+        artists: [],
+        genres: [],
       });
     });
-    console.log("years", years);
     return years;
   }
 
-  function display_analzyed_data(years, songs) {
+  function display_analzyed_data(years) {
+    years.sort((a, b) => a.year - b.year);
     total_years = years;
-    total_songs = songs;
   }
 
   function get_reoccuring_songs(all_songs) {
@@ -78,15 +69,6 @@
       }
     });
     return songs;
-  }
-
-  async function get_top_songs(playlists) {
-    let top_songs = [];
-    for (const playlist of playlists) {
-      const songs = await get_songs(playlist.id);
-      top_songs = top_songs.concat(songs.slice(0, 5));
-    }
-    return top_songs;
   }
 
   function analyze_songs(all_songs) {
@@ -113,7 +95,6 @@
         .map(([id, count]) => ({ id, count }))
         .sort(sortDescending),
     };
-    console.log("sorted", sortedData);
     return sortedData;
   }
 
@@ -136,11 +117,25 @@
     }
   }
 
-  async function get_songs_from_lists(playlists) {
+  async function get_songs_from_lists(playlists, years) {
     let songs = [];
+    console.log("years", years);
+
     for (const playlist of playlists) {
       songs = songs.concat(await get_songs(playlist.id));
     }
+
+    songs.forEach((song) => {
+      const foundYearObj = years.find(
+        (year) => year.playlist_id === song.playlist_id
+      );
+      if (foundYearObj) {
+        foundYearObj.songs = foundYearObj.songs || [];
+        foundYearObj.songs.push(song);
+      }
+    });
+    console.log("after", years);
+
     return songs;
   }
 
@@ -163,7 +158,9 @@
       title_id: song.track.id,
       place_on_list: index + 1,
       playlist_id: playlist_id,
+      popularity: song.track.popularity,
     }));
+
     return songs;
   }
 
@@ -183,11 +180,13 @@
     try {
       if (data.error) {
         if (data.error.status == 401) {
+          console.log("error 401 found, need auth");
           need_new_token = true;
           loading_list = 0;
+          return;
         } else {
           error_message = "Werid, some error occured.";
-          loading_list = 0;
+          return;
         }
       }
     } catch (error) {
@@ -232,12 +231,19 @@
         {error_message}
       </p>
     {:else if loading_list == 2}
-      <p class="font-heading text-xl font-bold m-auto text-center">
-        Your Music
+      <p class="font-heading text-3xl font-bold m-auto text-center">
+        YOUR MUSIC ANALYZED
       </p>
-      <p class="text-m m-auto text-center">
-        Years Analyzed: <strong class="text-sec-400">{total_years}</strong>
-        Songs Analyzed: <strong class="text-sec-400">{total_songs}</strong>
+      <p class="text-xl m-auto text-center">
+        Total Years Analyzed: <strong class="text-sec-400"
+          >{total_years.length}</strong
+        >
+      </p>
+      <p class="text-s text-light-400 m-auto text-center">
+        Years:
+        {#each total_years as year}
+          {year.year} &nbsp;
+        {/each}
       </p>
     {/if}
     <DisplayTaste />
