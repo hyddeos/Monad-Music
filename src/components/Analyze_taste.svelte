@@ -7,7 +7,7 @@
   let loading_list = 0; // 0 = not loading, 1 = loading, 2 = loaded
   let need_new_token = false;
   let total_years = [];
-  let songs;
+  let data = [];
 
   let accessToken = "";
   if (browser) {
@@ -20,23 +20,55 @@
     const all_playlists = await get_playlists();
     const wrapped_lists_info = get_wrapped_lists_info(all_playlists);
     if (wrapped_lists_info) {
-      const years_analyzed = await get_years(wrapped_lists_info);
-      const all_songs = await get_songs_from_lists(
+      const years = await get_years(wrapped_lists_info);
+      const years_all_songs = await get_songs_from_lists(
         wrapped_lists_info,
-        years_analyzed
+        years
       );
-      const counted_data = analyze_songs(all_songs);
-      const reoccuring_songs = get_reoccuring_songs(counted_data.songs);
-      const sorted_data = display_analzyed_data(years_analyzed);
-      songs = all_songs;
+      const data_counted = count_tops(years_all_songs.years);
+      const top_lists = get_info_about_tops(
+        years_all_songs.songs,
+        data_counted
+      );
+
+      display_analzyed_data(years);
       loading_list = 2;
-      console.log("TOTAL", total_years);
+      data = top_lists;
     } else {
       loading_list = false;
       console.error("Playlist already created or didt find new wrapped lists");
       error_message =
         "Playlist already created or we did not find any playlists to gather data from";
     }
+  }
+
+  function get_info_about_tops(all_songs, counted) {
+    let songs = [];
+    let albums = [];
+    let artists = [];
+
+    counted.top_songs.forEach((song) => {
+      const foundSong = all_songs.find((s) => s.title_id === song.id);
+      if (foundSong) {
+        songs.push(foundSong);
+      }
+      return;
+    });
+    counted.top_albums.forEach((album) => {
+      const foundAlbum = all_songs.find((s) => s.album_id === album.id);
+      if (foundAlbum) {
+        albums.push(foundAlbum);
+      }
+      return;
+    });
+    counted.top_artists.forEach((artist) => {
+      const foundArtist = all_songs.find((s) => s.artist_id === artist.id);
+      if (foundArtist) {
+        artists.push(foundArtist);
+      }
+      return;
+    });
+    return { songs, albums, artists };
   }
 
   async function get_years(playlists) {
@@ -51,6 +83,7 @@
         albums: [],
         artists: [],
         genres: [],
+        counted_data: [],
       });
     });
     return years;
@@ -61,28 +94,25 @@
     total_years = years;
   }
 
-  function get_reoccuring_songs(all_songs) {
-    let songs = [];
-    all_songs.forEach((song) => {
-      if (song.count > 1) {
-        songs.push(song.id);
-      }
-    });
-    return songs;
-  }
-
-  function analyze_songs(all_songs) {
+  function count_tops(years_data) {
     const data = {
       artists: {},
       songs: {},
       albums: {},
     };
-    all_songs.forEach((song) => {
-      const { title_id: songId, album_id: albumId, artist_id: artistId } = song;
-      data.songs[songId] = (data.songs[songId] || 0) + 1;
-      data.albums[albumId] = (data.albums[albumId] || 0) + 1;
-      data.artists[artistId] = (data.artists[artistId] || 0) + 1;
+    years_data.forEach((year) => {
+      year.songs.forEach((song) => {
+        const {
+          title_id: songId,
+          album_id: albumId,
+          artist_id: artistId,
+        } = song;
+        data.songs[songId] = (data.songs[songId] || 0) + 1;
+        data.albums[albumId] = (data.albums[albumId] || 0) + 1;
+        data.artists[artistId] = (data.artists[artistId] || 0) + 1;
+      });
     });
+    // Sort by highest count
     const sortDescending = (a, b) => b.count - a.count;
     const sortedData = {
       songs: Object.entries(data.songs)
@@ -95,7 +125,22 @@
         .map(([id, count]) => ({ id, count }))
         .sort(sortDescending),
     };
-    return sortedData;
+    // Only get the top 10
+    let top_songs = [];
+    let top_albums = [];
+    let top_artists = [];
+
+    sortedData.artists.slice(0, 10).map((artist, i) => {
+      top_artists.push(artist);
+    });
+    sortedData.albums.slice(0, 10).map((album, i) => {
+      top_albums.push(album);
+    });
+    sortedData.songs.slice(0, 10).map((song, i) => {
+      top_songs.push(song);
+    });
+
+    return { top_songs, top_albums, top_artists };
   }
 
   function get_wrapped_lists_info(all_playlists) {
@@ -119,8 +164,6 @@
 
   async function get_songs_from_lists(playlists, years) {
     let songs = [];
-    console.log("years", years);
-
     for (const playlist of playlists) {
       songs = songs.concat(await get_songs(playlist.id));
     }
@@ -134,9 +177,7 @@
         foundYearObj.songs.push(song);
       }
     });
-    console.log("after", years);
-
-    return songs;
+    return { years, songs };
   }
 
   async function get_songs(playlist_id) {
