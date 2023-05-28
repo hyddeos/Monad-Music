@@ -32,8 +32,8 @@
       );
 
       display_analzyed_data(years);
-      loading_list = 2;
       data = top_lists;
+      loading_list = 2;
     } else {
       loading_list = false;
       console.error("Playlist already created or didt find new wrapped lists");
@@ -287,7 +287,10 @@
         {/each}
       </p>
     {/if}
-    <DisplayTaste />
+    {#if data.songs}
+      <p>data</p>
+      <DisplayTaste {data} />
+    {/if}
     <p />
   </div>
 {/if}
