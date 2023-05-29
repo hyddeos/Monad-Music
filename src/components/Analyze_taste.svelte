@@ -190,11 +190,13 @@
       }
     );
     const data = await response.json();
+    console.log("dattrta", data);
     const songs = data.items.map((song, index) => ({
       artist: song.track.artists[0].name,
       artist_id: song.track.artists[0].id,
       album: song.track.album.name,
       album_id: song.track.album.id,
+      album_cover: song.track.album.images[1],
       title: song.track.name,
       title_id: song.track.id,
       place_on_list: index + 1,
@@ -288,7 +290,6 @@
       </p>
     {/if}
     {#if data.songs}
-      <p>data</p>
       <DisplayTaste {data} />
     {/if}
     <p />
