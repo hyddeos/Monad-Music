@@ -25,13 +25,16 @@
         wrapped_lists_info,
         years
       );
-      const data_counted = count_tops(years_all_songs.years);
+      const genre_data = await get_artist_data(years_all_songs.years);
+      const data_counted = count_tops(years_all_songs.years, genre_data);
+      console.log("out data", data_counted);
+
       const top_lists = get_info_about_tops(
         years_all_songs.songs,
         data_counted
       );
-
       display_analzyed_data(years);
+
       data = top_lists;
       loading_list = 2;
     } else {
@@ -42,10 +45,33 @@
     }
   }
 
+  async function get_artist_data(years_songs) {
+    let artists = [];
+    years_songs.forEach((year) => {
+      year.songs.slice(0, 10).map((artist, i) => {
+        artists.push(artist.artist_id);
+      });
+    });
+    artists = artists.join(",");
+
+    const response = await fetch(
+      `https://api.spotify.com/v1/artists?ids=${artists}`,
+      {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+        },
+      }
+    );
+    const data = await response.json();
+    return data;
+  }
+
   function get_info_about_tops(all_songs, counted) {
+    console.log("counted", counted);
     let songs = [];
     let albums = [];
     let artists = [];
+    let genres = counted.top_genres;
 
     counted.top_songs.forEach((song) => {
       const foundSong = all_songs.find((s) => s.title_id === song.id);
@@ -68,7 +94,7 @@
       }
       return;
     });
-    return { songs, albums, artists };
+    return { songs, albums, artists, genres };
   }
 
   async function get_years(playlists) {
@@ -94,12 +120,20 @@
     total_years = years;
   }
 
-  function count_tops(years_data) {
+  function count_tops(years_data, genre_data) {
     const data = {
       artists: {},
       songs: {},
       albums: {},
+      genres: {},
     };
+    // Genres
+    genre_data.artists.forEach((artist) => {
+      artist.genres.forEach((genre) => {
+        data.genres[genre] = (data.genres[genre] || 0) + 1;
+      });
+    });
+    //Songs ablums and artis
     years_data.forEach((year) => {
       year.songs.forEach((song) => {
         const {
@@ -124,11 +158,15 @@
       artists: Object.entries(data.artists)
         .map(([id, count]) => ({ id, count }))
         .sort(sortDescending),
+      genres: Object.entries(data.genres)
+        .map(([id, count]) => ({ id, count }))
+        .sort(sortDescending),
     };
     // Only get the top 10
     let top_songs = [];
     let top_albums = [];
     let top_artists = [];
+    let top_genres = [];
 
     sortedData.artists.slice(0, 10).map((artist, i) => {
       top_artists.push(artist);
@@ -139,8 +177,10 @@
     sortedData.songs.slice(0, 10).map((song, i) => {
       top_songs.push(song);
     });
-
-    return { top_songs, top_albums, top_artists };
+    sortedData.genres.slice(0, 10).map((genre, i) => {
+      top_genres.push(genre);
+    });
+    return { top_songs, top_albums, top_artists, top_genres };
   }
 
   function get_wrapped_lists_info(all_playlists) {
@@ -190,7 +230,6 @@
       }
     );
     const data = await response.json();
-    console.log("dattrta", data);
     const songs = data.items.map((song, index) => ({
       artist: song.track.artists[0].name,
       artist_id: song.track.artists[0].id,
