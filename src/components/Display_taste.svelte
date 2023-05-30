@@ -1,7 +1,27 @@
 <script>
   export let data;
-  console.log("d", data);
 </script>
+
+<div class="text-left flex flex-wrap mt-10">
+  <div class="bg-prim-600 h-14 w-6" />
+  <div>
+    <h2 class="font-heading text-2xl mx-3">TOP ARTISTS</h2>
+    <h4 class="mx-3">The artists that has most songs on your top-lists</h4>
+  </div>
+</div>
+<div class="flex flex-wrap justify-between mt-2 max-w-4xl">
+  {#each data.artists as artist, index}
+    <div class="flex mt-2 w-1/2 border-2 border-dark-700 p-2">
+      <div class="w-1/12 font-bold text-sec-400 text-xl">
+        {index + 1}.
+      </div>
+      <div class="w-full px-4">
+        <h4 class="font-bold text-left">{artist.artist}</h4>
+      </div>
+      <div class="w-1/2" />
+    </div>
+  {/each}
+</div>
 
 <div class="text-left flex flex-wrap mt-10">
   <div class="bg-prim-600 h-14 w-6" />
@@ -25,27 +45,6 @@
       <div>
         <img src={album.album_cover.url} alt="Album cover for {album.album}" />
       </div>
-    </div>
-  {/each}
-</div>
-
-<div class="text-left flex flex-wrap mt-10">
-  <div class="bg-prim-600 h-14 w-6" />
-  <div>
-    <h2 class="font-heading text-2xl mx-3">TOP ARTISTS</h2>
-    <h4 class="mx-3">The artists that has most songs on your top-lists</h4>
-  </div>
-</div>
-<div class="flex flex-wrap justify-between mt-2 max-w-4xl">
-  {#each data.artists as artist, index}
-    <div class="flex mt-2 w-1/2 border-2 border-dark-700 p-2">
-      <div class="w-1/12 font-bold text-sec-400 text-xl">
-        {index + 1}.
-      </div>
-      <div class="w-full px-4">
-        <h4 class="font-bold text-left">{artist.artist}</h4>
-      </div>
-      <div class="w-1/2" />
     </div>
   {/each}
 </div>

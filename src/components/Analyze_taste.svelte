@@ -27,8 +27,6 @@
       );
       const genre_data = await get_artist_data(years_all_songs.years);
       const data_counted = count_tops(years_all_songs.years, genre_data);
-      console.log("out data", data_counted);
-
       const top_lists = get_info_about_tops(
         years_all_songs.songs,
         data_counted
@@ -67,7 +65,6 @@
   }
 
   function get_info_about_tops(all_songs, counted) {
-    console.log("counted", counted);
     let songs = [];
     let albums = [];
     let artists = [];

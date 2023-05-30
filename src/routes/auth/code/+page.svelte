@@ -70,6 +70,13 @@
           Ultimate Playlist
         </button></a
       >
+      <a href="/analyzemusic"
+        ><button
+          class="w-52 h-10 m-2 bg-sec-500 rounded text-center text-2xl font-heading text-dark-900 text-ellipsis overflow-hidden hover:bg-sec-400"
+        >
+          Analyze Music
+        </button></a
+      >
     </div>
   </div>
 </div>
