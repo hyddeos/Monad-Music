@@ -75,6 +75,10 @@
           class="font-heading text-gray-800 hover:text-prim-400"
           href="/ultimateplaylist">ULTIMATE PLAYLIST</a
         >
+        <a
+          class="font-heading text-gray-800 hover:text-prim-400"
+          href="/analyzemusic">ANALYZE MUSIC TASTE</a
+        >
         {#if accessToken}
           <p>
             <a
