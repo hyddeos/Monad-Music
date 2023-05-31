@@ -32,7 +32,6 @@
         data_counted
       );
       display_analzyed_data(years);
-
       data = top_lists;
       loading_list = 2;
     } else {
@@ -239,14 +238,15 @@
       playlist_id: playlist_id,
       popularity: song.track.popularity,
     }));
-
     return songs;
   }
 
   async function get_playlists() {
     if (!browser) return;
-    if (!accessToken) return;
-
+    if (!accessToken) {
+      need_new_token = true;
+      return;
+    }
     const response = await fetch(
       "https://api.spotify.com/v1/me/playlists?limit=50",
       {
@@ -279,25 +279,27 @@
   <NotAuthed />
 {:else}
   <div class="m-2 mt-2 bg-dark-900 p-6 rounded border-2 border-dark-700">
-    <div>
-      <h3 class="text-3xl text-center font-handwrite tracking-wider my-2">
-        Find out more about your listening history
-      </h3>
-      <h2 class="text-5xl text-center font-heading tracking-wider my-2">
-        ANALYZE MUSIC TASTE
-      </h2>
-      <h5 class=" text-center tracking-wider my-2">
-        Summerizes all your years on Spotify and analzes your music taste
-        indepth
-      </h5>
-    </div>
+    {#if loading_list == 0 || loading_list == 1}
+      <div>
+        <h3 class="text-3xl text-center font-handwrite tracking-wider my-2">
+          Find out more about your listening history
+        </h3>
+        <h2 class="text-5xl text-center font-heading tracking-wider my-2">
+          ANALYZE MUSIC TASTE
+        </h2>
+        <h5 class=" text-center tracking-wider my-2">
+          Summerizes all your years on Spotify and analzes your music taste
+          indepth
+        </h5>
+      </div>
+    {/if}
     <div class="flex justify-center items-center m-auto">
       {#if loading_list == 1}
         <button
           class="w-48 h-20 m-2 bg-dark-500 rounded text-center text-ellipsis overflow-hidden hover:bg-dark-500"
           ><strong>Loading...</strong></button
         >
-      {:else}
+      {:else if loading_list == 0}
         <button
           on:click={() => generate_list()}
           class="w-48 h-20 m-2 bg-prim-500 rounded text-center text-ellipsis overflow-hidden hover:bg-prim-400"
@@ -305,12 +307,12 @@
         >
       {/if}
     </div>
+
     {#if error_message}
       <p class="text-[#c94242] text-xl m-auto text-center">
         {error_message}
       </p>
     {:else if loading_list == 2}
-      <p class="font-heading text-3xl font-bold m-auto text-center">
         YOUR MUSIC ANALYZED
       </p>
       <p class="text-xl m-auto text-center">

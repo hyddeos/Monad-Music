@@ -205,7 +205,10 @@
 
   async function get_playlists() {
     if (!browser) return;
-    if (!accessToken) return;
+    if (!accessToken) {
+      need_new_token = true;
+      return;
+    }
 
     const response = await fetch(
       "https://api.spotify.com/v1/me/playlists?limit=50",
