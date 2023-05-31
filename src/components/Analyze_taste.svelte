@@ -307,12 +307,13 @@
         >
       {/if}
     </div>
-
     {#if error_message}
       <p class="text-[#c94242] text-xl m-auto text-center">
         {error_message}
       </p>
-    {:else if loading_list == 2}
+    {/if}
+    {#if loading_list == 2}
+      <p class="font-heading text-3xl font-bold m-auto text-center">
         YOUR MUSIC ANALYZED
       </p>
       <p class="text-xl m-auto text-center">
