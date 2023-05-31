@@ -247,7 +247,6 @@
       need_new_token = true;
       return;
     }
-
     const response = await fetch(
       "https://api.spotify.com/v1/me/playlists?limit=50",
       {
@@ -314,7 +313,6 @@
         {error_message}
       </p>
     {:else if loading_list == 2}
-      <p class="font-heading text-3xl font-bold m-auto text-center">
         YOUR MUSIC ANALYZED
       </p>
       <p class="text-xl m-auto text-center">
