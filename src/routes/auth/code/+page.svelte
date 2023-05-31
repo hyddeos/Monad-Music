@@ -46,7 +46,7 @@
   <div class="m-2 mt-2 bg-dark-900 p-6 rounded border-2 border-dark-700">
     <img id="bg" src={bgImage} alt="consert background" />
     <h1
-      class="text-4xl text-center text-[#42c968] font-bold tracking-wider my-1>Hold on..."
+      class="text-3xl md:text-4xl text-center text-[#42c968] font-bold tracking-wider my-1"
     >
       AUTHENTICATION COMPLETE
     </h1>

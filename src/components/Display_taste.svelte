@@ -2,16 +2,16 @@
   export let data;
 </script>
 
-<div class="text-left flex flex-wrap mt-10">
-  <div class="bg-prim-600 h-14 w-6" />
-  <div>
+<div class="text-left md:flex md:flex-wrap inline-block mt-10">
+  <div class="bg-prim-600 h-14 w-6 hidden md:block" />
+  <div class="border-l-4 border-prim-600">
     <h2 class="font-heading text-2xl mx-3">TOP ARTISTS</h2>
     <h4 class="mx-3">The artists that has most songs on your top-lists</h4>
   </div>
 </div>
-<div class="flex flex-wrap justify-between mt-2 max-w-4xl">
+<div class="md:flex md:flex-wrap justify-between mt-2 md:max-w-4xl">
   {#each data.artists as artist, index}
-    <div class="flex mt-2 w-1/2 border-2 border-dark-700 p-2">
+    <div class="flex mt-2 md:w-1/2 border-2 border-dark-700 p-2">
       <div class="w-1/12 font-bold text-sec-400 text-xl">
         {index + 1}.
       </div>
@@ -23,16 +23,16 @@
   {/each}
 </div>
 
-<div class="text-left flex flex-wrap mt-10">
-  <div class="bg-prim-600 h-14 w-6" />
-  <div>
+<div class="text-left md:flex md:flex-wrap inline-block mt-10">
+  <div class="bg-prim-600 h-14 w-6 hidden md:block" />
+  <div class="border-l-4 border-prim-600">
     <h2 class="font-heading text-2xl mx-3">TOP ALBUMS</h2>
     <h4 class="mx-3">The albums with most songs on your top-lists</h4>
   </div>
 </div>
-<div class="flex flex-wrap justify-between mt-2 max-w-4xl">
+<div class="md:flex md:flex-wrap justify-between mt-2 md:max-w-4xl">
   {#each data.albums as album, index}
-    <div class="flex mt-2 w-1/2 border-2 border-dark-700 p-2">
+    <div class="flex mt-2 md:w-1/2 border-2 border-dark-700 p-2">
       <div class="w-1/12 font-bold text-sec-400 text-xl">
         {index + 1}.
       </div>
@@ -49,18 +49,18 @@
   {/each}
 </div>
 
-<div class="text-left mt-10 flex flex-wrap">
-  <div class="bg-prim-600 h-14 w-6" />
-  <div>
+<div class="text-left md:flex md:flex-wrap inline-block mt-10">
+  <div class="bg-prim-600 h-14 w-6 hidden md:block" />
+  <div class="border-l-4 border-prim-600">
     <h2 class="font-heading text-2xl mx-3">TOP SONGS</h2>
     <h4 class="mx-3">
       The songs that has been on your top-lists for most years
     </h4>
   </div>
 </div>
-<div class="flex flex-wrap justify-between mt-2 max-w-4xl">
+<div class="md:flex md:flex-wrap justify-between mt-2 md:max-w-4xl">
   {#each data.songs as song, index}
-    <div class="flex mt-2 w-1/2 border-2 border-dark-700 p-2">
+    <div class="flex mt-2 md:w-1/2 border-2 border-dark-700 p-2">
       <div class="w-1/12 font-bold text-sec-400 text-xl">
         {index + 1}.
       </div>
@@ -73,16 +73,16 @@
   {/each}
 </div>
 
-<div class="text-left mt-10 flex flex-wrap">
-  <div class="bg-prim-600 h-14 w-6" />
-  <div>
+<div class="text-left md:flex md:flex-wrap inline-block mt-10">
+  <div class="bg-prim-600 h-14 w-6 hidden md:block" />
+  <div class="border-l-4 border-prim-600">
     <h2 class="font-heading text-2xl mx-3">TOP GENRES</h2>
     <h4 class="mx-3">What genres has topped your lists over the years</h4>
   </div>
 </div>
-<div class="flex flex-wrap justify-between mt-2 max-w-4xl">
+<div class="md:flex md:flex-wrap justify-between mt-2 md:max-w-4xl">
   {#each data.genres as genre, index}
-    <div class="flex mt-2 w-1/2 border-2 border-dark-700 p-2">
+    <div class="flex mt-2 md:w-1/2 border-2 border-dark-700 p-2">
       <div class="w-1/12 font-bold text-sec-400 text-xl">
         {index + 1}.
       </div>
