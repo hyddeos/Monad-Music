@@ -1,6 +1,11 @@
 
 # GET STARTED 
 
+# Spotify Developer
+
+First you will need to create a new app over at [`Spotify Developer`](https://developer.spotify.com/).
+For more information about the hows, visist the [`Spotify Developer Documentation`](https://developer.spotify.com/documentation/web-api).
+
 # create-svelte
 
 Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
@@ -21,9 +26,10 @@ npm create svelte@latest my-app
 
 Place your .env file a root of your project
 ```
-VITE_SPOTIFY_CLIENT_ID=-- Insert Your Client Id here provided by Spotify --
-VITE_REDIRECT_URL=--Insert here--
+VITE_SPOTIFY_CLIENT_ID=
+VITE_REDIRECT_URL=
 ```
+The client_id you will get from the Spotify app as well as deside your own redirect_url 
 
 ## Developing
 
