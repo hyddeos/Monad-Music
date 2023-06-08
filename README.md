@@ -1,3 +1,6 @@
+
+# GET STARTED 
+
 # create-svelte
 
 Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
@@ -12,6 +15,14 @@ npm create svelte@latest
 
 # create a new project in my-app
 npm create svelte@latest my-app
+```
+
+## Environment varibles (.env)
+
+Place your .env file a root of your project
+```
+VITE_SPOTIFY_CLIENT_ID=-- Insert Your Client Id here provided by Spotify --
+VITE_REDIRECT_URL=--Insert here--
 ```
 
 ## Developing
