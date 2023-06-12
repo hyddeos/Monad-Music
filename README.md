@@ -1,3 +1,10 @@
+# SCREEN SHOTS
+You can visit the site at [`Monad Music`](https://monad.eshtropy.se/) or see some screens below
+
+<img src="https://github.com/hyddeos/Monad-Music/assets/39992041/75d4053c-1978-4c29-b2e2-2c927918b9de" width="400"/>
+<img src="https://github.com/hyddeos/Monad-Music/assets/39992041/688358ea-8ad3-4c24-a062-3efdcdde5d6f" width="400"/>
+<img src="https://github.com/hyddeos/Monad-Music/assets/39992041/372b070f-fe00-4580-8bab-f35bc56895da" width="400"/>
+<img src="https://github.com/hyddeos/Monad-Music/assets/39992041/24239370-218e-4d6f-979c-d14dba04b45c" width="400"/>
 
 # GET STARTED 
 
