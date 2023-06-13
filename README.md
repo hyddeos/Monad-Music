@@ -1,5 +1,23 @@
+# WHAT IS DOES
+
+You can visit a live version at [`Monad Music`](https://monad.eshtropy.se/) or see some screens below.
+
+The page consists of mainly 3 parts, A cover art game, a playlist generator and an analyzer of the users music.
+
+## COVER ART GAME
+Insert whatever Spotify playlist url or id and the game will randomly select cover art from that list, then its up to the user to guess is the right one(there will be maximum 10 of questions).
+To make it harder you can adjust the difficulty and then you will be shown a cropped version of the album.
+Perfect for quiz-nights with friends!
+
+## ULTIMATE PLAYLIST
+This creates and automaticly add new playlist to your account with the music that the user has listed to the most over through out the years. The aim was to generate a list which contains your most everlasting hits on spotify.
+It will combine songs that has been top hits each year aswell as hits and has shown up over diffrent years.
+
+## ANALYZE YOUR YEARS ON SPOTIFY
+A short and simple way to show what music the user seems to have been most into over their years on Spotify. Lists the best artist, albums and songs aswell as what seems to be the most popular genres over time.
+
+### This repo wont be able to be publised beyond Spotify developer mode without some changes and the removal of the Cover Art Game. Since it will violate the [`Spotify Policy`]([https://developer.spotify.com/](https://developer.spotify.com/policy)).
 # SCREEN SHOTS
-You can visit the site at [`Monad Music`](https://monad.eshtropy.se/) or see some screens below
 
 <img src="https://github.com/hyddeos/Monad-Music/assets/39992041/75d4053c-1978-4c29-b2e2-2c927918b9de" width="400"/>
 <img src="https://github.com/hyddeos/Monad-Music/assets/39992041/688358ea-8ad3-4c24-a062-3efdcdde5d6f" width="400"/>
